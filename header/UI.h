@@ -27,6 +27,7 @@ char getYesNoAnswer();
  */
 uint32_t askNumber(uint32_t upperLimit);
 
-void displayChooseFiles(std::string& edges, std::string& nodes, bool& header, std::string& path);
+void displayChooseFiles(std::string& edges, std::string& nodes, bool& header, uint32_t& num_nodes, std::string& path);
+void displayFunctionalities();
 
 #endif

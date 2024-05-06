@@ -29,19 +29,30 @@ char getYesNoAnswer(){
 
 uint32_t askNumber(uint32_t upperLimit){
     do{
-        std::string value;
-        std::cin >> value;
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        try {
+            std::string value;
+            std::cin >> value;
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-        if(value.size() == 1 and value.front() >= '1' and value.front() <= '0' + upperLimit){
-            return value[0] - '0';
+            uint32_t number = std::stoi(value);
+
+            if (number >= 1 && number <= upperLimit) {
+                return number;
+            } else {
+                std::cout << "Invalid input. The number must be between 1 and " << upperLimit << ": ";
+            }
+        } catch (const std::invalid_argument& e) {
+            std::cout << "Invalid input. Please enter a valid number: ";
+        } catch (const std::out_of_range& e) {
+            std::cout << "Input out of range. Please enter a valid number: ";
         }
-        else std::cout << "Invalid input. The number must be between 1 and " << upperLimit << ": ";
     } while (true);
 }
 
-void displayChooseFiles(std::string& edges, std::string& nodes, bool& header, std::string& path){
+void displayChooseFiles(std::string& edges, std::string& nodes, bool& header, uint32_t& num_nodes, std::string& path){
     nodes = getNewFileName("nodes");
+    std::cout << "How many nodes are in the file: ";
+    num_nodes = askNumber(UINT32_MAX);
     edges = getNewFileName("Edges");
     std::cout << "Does the file " << edges << "has a header?\n";
     header = getYesNoAnswer();
@@ -56,8 +67,10 @@ void displayChooseFiles(std::string& edges, std::string& nodes, bool& header, st
 
 void displayFunctionalities(){
     std::cout << "Choose one of the following options:\n"
-              << "\t1. ;\n"
-              << "\t2. ;\n"
+              << "\t1. Backtracking algorithm;\n"
+              << "\t2. Triangular Approximation Heuristic;\n"
+              << "\t3. Other Heuristics;\n"
+              << "\t4. TSP in the Real World;\n"
               << "\t8. Load other files.\n"
               << "\t9. Close the app.\n";
     std::cout << "[1..9]: ";

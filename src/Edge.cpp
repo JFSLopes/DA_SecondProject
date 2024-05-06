@@ -1,7 +1,7 @@
 #include "../header/Edge.h"
 
-Edge::Edge(std::shared_ptr<Vertex> dest, double weight)
-        : dest(std::move(dest)), weight(weight) {}
+Edge::Edge(std::shared_ptr<Vertex> orig, std::shared_ptr<Vertex> dest, double weight)
+        : orig(orig), dest(std::move(dest)), weight(weight) {}
 
 
 double Edge::getWeight() const {
@@ -10,4 +10,8 @@ double Edge::getWeight() const {
 
 std::shared_ptr<Vertex> Edge::getDest() const {
     return dest;
+}
+
+std::shared_ptr<Vertex> Edge::getOrig() const {
+    return orig;
 }
