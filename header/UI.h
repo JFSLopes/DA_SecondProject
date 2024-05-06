@@ -1,7 +1,11 @@
 #ifndef DA_SECONDPROJECT_UI_H
 #define DA_SECONDPROJECT_UI_H
 
+class Edge;
+
+#include "Edge.h"
 #include <string>
+#include <memory>
 
 /**
  * @return Returns a string with the path of a file
@@ -29,5 +33,6 @@ uint32_t askNumber(uint32_t upperLimit);
 
 void displayChooseFiles(std::string& edges, std::string& nodes, bool& header, uint32_t& num_nodes, std::string& path);
 void displayFunctionalities();
+void displayPath(const std::vector<std::shared_ptr<Edge>>& path);
 
 #endif

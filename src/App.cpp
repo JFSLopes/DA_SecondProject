@@ -7,9 +7,9 @@
 void App::init() {
     while(true){
         std::string nodes = "nodes.csv";
-        std::string edges = "edges_25.csv";
-        std::string path = "../Dataset/Fully-connected/";
-        bool header = false;
+        std::string edges = "stadiums.csv";
+        std::string path = "../Dataset/Toy/";
+        bool header = true;
         uint32_t num_nodes = 25;
         g = std::make_unique<Graph>();
 
@@ -19,7 +19,7 @@ void App::init() {
 
 
         //displayChooseFiles(edges, nodes, header, num_nodes, path);
-        if (!FileParse::readFiles(g, edges, nodes, header, num_nodes, path, false)){
+        if (!FileParse::readFiles(g, edges, nodes, header, num_nodes, path, true)){
             std::cout << "Something went wrong while reading the files. Make sure the names and path are correct.\n";
             continue;
         }
@@ -68,6 +68,9 @@ bool App::functionalities() {
             case 4:
                 TSP_Real_World();
                 break;
+            case 5:
+                held_karp();
+                break;
             case 8:
                 return true;
             case 9:
@@ -100,11 +103,6 @@ void App::find_best_hamiltonian(
             curr_path.pop_back();
         }
         else if ( /** it is visited */ dest->getCode() == d->getCode() and curr_path.size() + 1 == size_hamiltonian){ /// It is a hamiltonian cycle
-            count++;
-            if (count == 10000000){
-                count = 0;
-                std::cout << value++ << "\n";
-            }
             curr_path.push_back(e);
             path_sum += e->getWeight();
             if (best_path.empty() or best_sum > path_sum){
@@ -123,7 +121,7 @@ void App::backtracking() const {
     auto start_time = std::chrono::high_resolution_clock::now();
 
 
-    uint32_t size_hamiltonian = g->getVertexSet().size() - 1;
+    uint32_t size_hamiltonian = g->getVertexSet().size();
     for (const std::shared_ptr<Vertex>& vertex : g->getVertexSet()){
         vertex->setVisited(false);
     }
@@ -134,10 +132,7 @@ void App::backtracking() const {
     s->setDist(0);
     double path_sum = 0, best_sum = DBL_MAX;
     find_best_hamiltonian(s, s, curr_path, best_path, size_hamiltonian, path_sum, best_sum);
-    for (const auto& e : best_path){
-        std::cout << e->getOrig()->getCode() << " " << e->getDest()->getCode() << "\n";
-    }
-    std::cout << "Distance: " << best_sum << "\n";
+    displayPath(best_path);
 
 
 
@@ -157,6 +152,10 @@ void App::triangular_approximation() const {
 }
 
 void App::other_heuristic() const {
+
+}
+
+void App::held_karp() const {
 
 }
 

@@ -34,6 +34,7 @@ public:
     void backtracking() const;
     void triangular_approximation() const;
     void other_heuristic() const;
+    void held_karp() const;
     void TSP_Real_World() const;
 };
 

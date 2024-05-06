@@ -71,7 +71,20 @@ void displayFunctionalities(){
               << "\t2. Triangular Approximation Heuristic;\n"
               << "\t3. Other Heuristics;\n"
               << "\t4. TSP in the Real World;\n"
+              << "\t5. Using Held-Karp (Dynamic Programming);\n"
               << "\t8. Load other files.\n"
               << "\t9. Close the app.\n";
     std::cout << "[1..9]: ";
+}
+
+void displayPath(const std::vector<std::shared_ptr<Edge>>& path){
+    std::cout << "The following Hamiltonian path is optimal:\n";
+    double dist = 0;
+    std::cout << path.front()->getOrig()->getCode() << " - ";
+    for (const std::shared_ptr<Edge>& e : path){
+        std::cout << e->getDest()->getCode();
+        if (e->getDest()->getCode() != path.front()->getOrig()->getCode()) std::cout << " - ";
+        dist += e->getWeight();
+    }
+    std::cout << "\nThe total distance is: " << dist << "\n";
 }
