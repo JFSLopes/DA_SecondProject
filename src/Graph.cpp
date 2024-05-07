@@ -1,6 +1,7 @@
 #include "../header/Graph.h"
 #include <cfloat>
 #include <unordered_map>
+#include <stack>
 
 const std::vector<std::shared_ptr<Vertex>>& Graph::getVertexSet() const {
     return vertexSet;
@@ -64,14 +65,23 @@ std::vector<std::shared_ptr<Vertex>> Graph::prim(const std::shared_ptr<Vertex>& 
     }
     return ans;
 }
-
+int count = 0;
 void Graph::pre_order(std::shared_ptr<Vertex>& s, std::vector<std::shared_ptr<Vertex>>& preOrder) const {
-    s->setVisited(true);
-    preOrder.push_back(s);
-    for (const std::shared_ptr<Edge>& e : s->getAdj()){
-        if (e->isSelected()){
-            std::shared_ptr<Vertex> v = e->getDest();
-            pre_order(v, preOrder);
+    std::stack<std::shared_ptr<Vertex>> stack;
+    stack.push(s);
+
+    while (!stack.empty()) {
+        std::cout << count++ << "\n";
+        std::shared_ptr<Vertex> current = stack.top();
+        preOrder.push_back(current);
+        stack.pop();
+
+        // Push adjacent vertices to the stack in reverse order
+        for (const std::shared_ptr<Edge>& e : current->getAdj()) {
+            if (e->isSelected()) {
+                std::shared_ptr<Vertex> v = e->getDest();
+                stack.push(v);
+            }
         }
     }
 }
@@ -87,25 +97,9 @@ bool Graph::triangular_approximation(std::shared_ptr<Vertex>& s, const std::shar
 
     for (size_t i = 0; i < mst.size() - 1; i++) {
         std::shared_ptr<Edge> e = mst[i]->findEdge(mst[i + 1]);
-        if (e == nullptr){ /// Edge does not exist, we must create one
-            if (mst[i]->getCoordinates().getLat() == DBL_MAX) return false; /// There is no coordinates to calculate the distance
-
-            double distance = haversine(mst[i]->getCoordinates(), mst[i+1]->getCoordinates());
-            mst[i]->addEdge(mst[i], mst[i+1], distance);
-            mst[i+1]->addEdge(mst[i+1], mst[i], distance);
-            e = mst[i]->findEdge(mst[i+1]);
-        }
         path.push_back(e);
     }
     std::shared_ptr<Edge> last_edge = mst.back()->findEdge(s);
-    if (last_edge == nullptr){ /// Edge does not exist, we must create one
-        if (mst.back()->getCoordinates().getLat() == DBL_MAX) return false; /// There is no coordinates to calculate the distance
-        double distance = haversine(s->getCoordinates(), mst.back()->getCoordinates());
-        mst.back()->addEdge(mst.back(), s, distance);
-        s->addEdge(s, mst.back(), distance);
-        last_edge = mst.back()->findEdge(s);
-    }
-    last_edge->setSelected(true);
     path.push_back(last_edge);
 
     return true;

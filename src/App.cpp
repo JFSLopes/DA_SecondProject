@@ -8,7 +8,7 @@ void App::init() {
     while(true){
         std::string nodes = "nodes.csv";
         std::string edges = "edges.csv";
-        std::string path = "../Dataset/Real-world/graph3/";
+        std::string path = "../Dataset/Real-world/graph2/";
         bool header = true;
         bool edges_only = false;
         uint32_t num_nodes = 100000;
