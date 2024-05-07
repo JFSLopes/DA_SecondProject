@@ -9,6 +9,9 @@ class Vertex;
 class Graph{
 private:
     std::vector<std::shared_ptr<Vertex>> vertexSet; /// Vector tha holds all vertexes that belong to the graph
+
+    std::vector<std::shared_ptr<Vertex>> prim(const std::shared_ptr<Vertex>& s) const;
+    void pre_order(std::shared_ptr<Vertex>& s, std::vector<std::shared_ptr<Vertex>>& pre_order) const;
 public:
     /**
      * @brief Returns the vertex set of the graph.
@@ -28,6 +31,7 @@ public:
      * @return Returns a pointer to the vertex being looked for or nullptr otherwise
      */
     std::shared_ptr<Vertex> findVertex(uint32_t code) const;
+    bool triangular_approximation(std::shared_ptr<Vertex>& s, const std::shared_ptr<Vertex>& d, std::vector<std::shared_ptr<Edge>>& path) const;
 };
 
 #endif

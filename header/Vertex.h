@@ -5,6 +5,7 @@ class Edge;
 
 #include "Edge.h"
 #include "Coordinates.h"
+#include "MutablePriorityQueue.h"
 #include <vector>
 #include <memory>
 
@@ -28,8 +29,17 @@ public:
 
     void setVisited(bool cond);
     void setDist(double distance);
+    void setPath(std::shared_ptr<Edge> e);
 
     void addEdge(const std::shared_ptr<Vertex> &s, const std::shared_ptr<Vertex>& d, double distance);
+    std::shared_ptr<Edge> findEdge(const std::shared_ptr<Vertex>& d) const;
+
+
+    friend class MutablePriorityQueue<Vertex>;
+protected:
+    int queueIndex = 0;
 };
+
+bool operator<(const Vertex& a, const Vertex& b);
 
 #endif

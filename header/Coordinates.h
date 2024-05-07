@@ -12,6 +12,8 @@ private:
     double lat; ///< stores the latitude of a coordinate
     double lon; ///< stores the longitude of a coordinate
 public:
+    double getLat() const;
+    double getLon() const;
     Coordinates (double , double );
     /**
      * @brief Calculates the distance between two given coordinates
@@ -24,5 +26,7 @@ public:
      */
     friend double haversine(const Coordinates& c1, const Coordinates& c2);
 };
+
+double haversine(const Coordinates& c1, const Coordinates& c2);
 
 #endif //DA_SECONDPROJECT_COORDINATES_H

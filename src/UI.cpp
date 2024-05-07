@@ -78,7 +78,7 @@ void displayFunctionalities(){
 }
 
 void displayPath(const std::vector<std::shared_ptr<Edge>>& path){
-    std::cout << "The following Hamiltonian path is optimal:\n";
+    std::cout << "The following Hamiltonian path was found:\n";
     double dist = 0;
     std::cout << path.front()->getOrig()->getCode() << " - ";
     for (const std::shared_ptr<Edge>& e : path){

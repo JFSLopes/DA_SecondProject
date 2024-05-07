@@ -34,7 +34,24 @@ void Vertex::setDist(double distance) {
     dist = distance;
 }
 
+void Vertex::setPath(std::shared_ptr<Edge> e) {
+    path = e;
+}
+
 void Vertex::addEdge(const std::shared_ptr<Vertex> &s, const std::shared_ptr<Vertex> &d, double distance) {
     std::shared_ptr<Edge> edge = std::make_shared<Edge>(s, d, distance);
     adj.push_back(edge);
+}
+
+std::shared_ptr<Edge> Vertex::findEdge(const std::shared_ptr<Vertex> &d) const {
+    for (const std::shared_ptr<Edge>& e : adj){
+        if (e->getDest()->getCode() == d->getCode()){
+            return e;
+        }
+    }
+    return nullptr;
+}
+
+bool operator<(const Vertex& a, const Vertex& b){
+    return a.getDist() < b.getDist();
 }

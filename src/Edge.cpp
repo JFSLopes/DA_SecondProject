@@ -15,3 +15,15 @@ std::shared_ptr<Vertex> Edge::getDest() const {
 std::shared_ptr<Vertex> Edge::getOrig() const {
     return orig;
 }
+
+bool Edge::isSelected() const {
+    return selected;
+}
+
+void Edge::setSelected(bool cond) {
+    selected = cond;
+}
+
+void Edge::setWeight(double w) {
+    weight = w;
+}

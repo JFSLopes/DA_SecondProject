@@ -3,6 +3,14 @@
 
 Coordinates::Coordinates(double lat, double lon) : lat(lat), lon(lon) {}
 
+double Coordinates::getLat() const {
+    return lat;
+}
+
+double Coordinates::getLon() const {
+    return lon;
+}
+
 double haversine(const Coordinates& c1, const Coordinates& c2){
     double dLat = (c2.lat - c1.lat) * M_PI / 180.0;
     double dLon = (c2.lon - c1.lon) * M_PI / 180.0;

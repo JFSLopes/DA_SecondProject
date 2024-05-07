@@ -2,6 +2,7 @@
 #include "../header/UI.h"
 #include <iostream>
 #include <sstream>
+#include <cfloat>
 
 bool FileParse::readFiles(std::unique_ptr<Graph> &g, std::string &edges, std::string &nodes, bool header, uint32_t num_nodes, std::string &path, bool only_edges){
     if (only_edges){
@@ -107,12 +108,12 @@ void FileParse::readOnlyEdges(std::unique_ptr<Graph> &g, std::ifstream &in, bool
         std::shared_ptr<Vertex> d = g->findVertex(dest);
 
         if (s == nullptr){
-            s = std::make_shared<Vertex>(orig, 0, 0);
+            s = std::make_shared<Vertex>(orig, DBL_MAX, DBL_MAX);
             g->addVertex(s);
         }
 
         if (d == nullptr){
-            d = std::make_shared<Vertex>(dest, 0, 0);
+            d = std::make_shared<Vertex>(dest, DBL_MAX, DBL_MAX);
             g->addVertex(d);
         }
 

@@ -11,7 +11,7 @@ private:
     std::shared_ptr<Vertex> orig; /// Represents the destination Vertex of the edge
     std::shared_ptr<Vertex> dest; /// Represents the destination Vertex of the edge
     double weight; /// Represents the weight of the edge
-
+    bool selected;
 public:
     /**
      * @brief Edge Constructor
@@ -32,6 +32,9 @@ public:
      * @return Returns the weight of the Edge
      */
     double getWeight() const;
+    bool isSelected() const;
+    void setSelected(bool cond);
+    void setWeight(double w);
 };
 
 #endif

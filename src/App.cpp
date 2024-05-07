@@ -7,7 +7,7 @@
 void App::init() {
     while(true){
         std::string nodes = "nodes.csv";
-        std::string edges = "stadiums.csv";
+        std::string edges = "tourism.csv";
         std::string path = "../Dataset/Toy/";
         bool header = true;
         uint32_t num_nodes = 25;
@@ -44,12 +44,10 @@ bool App::functionalities() {
     int count = 0;
     for (const auto& x : vec){
         for (auto y : x->getAdj()){
-            std::cout << y->getOrig()->getCode() << " " << y->getDest()->getCode() << "\n";
             count++;
         }
     }
     std::cout << "Number of edges: " << count << "\n";
-
 
 
 
@@ -148,7 +146,16 @@ void App::backtracking() const {
 }
 
 void App::triangular_approximation() const {
-
+    for (const std::shared_ptr<Vertex>& vertex : g->getVertexSet()){
+        vertex->setVisited(false);
+    }
+    std::shared_ptr<Vertex> s = g->findVertex(0);
+    std::vector<std::shared_ptr<Edge>> path;
+    if (!g->triangular_approximation(s, s, path)){
+        std::cout << "Is not possible to do the approximation\n";
+        return;
+    }
+    displayPath(path);
 }
 
 void App::other_heuristic() const {
