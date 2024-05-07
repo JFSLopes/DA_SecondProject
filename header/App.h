@@ -13,6 +13,8 @@ class App {
 private:
     /// Pointer to the graph structure that represents the network
     std::unique_ptr<Graph> g;
+    uint32_t num_nodes;
+    uint64_t num_edges = 0;
 
     void find_best_hamiltonian(
             std::shared_ptr<Vertex>& s,
@@ -22,6 +24,8 @@ private:
             uint32_t size_hamiltonian,
             double& path_sum,
             double& best_sum) const;
+
+    void make_fully_connected();
 public:
     /**
      * @brief Allows the application to be initialized the right way
@@ -32,7 +36,7 @@ public:
      * @brief Generate all possible paths that are hamiltonian and choose the shortest
      */
     void backtracking() const;
-    void triangular_approximation() const;
+    void triangular_approximation();
     void other_heuristic() const;
     void held_karp() const;
     void TSP_Real_World() const;

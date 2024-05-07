@@ -1,5 +1,6 @@
 #include "../header/Graph.h"
 #include <cfloat>
+#include <unordered_map>
 
 const std::vector<std::shared_ptr<Vertex>>& Graph::getVertexSet() const {
     return vertexSet;
@@ -15,7 +16,7 @@ std::shared_ptr<Vertex> Graph::findVertex(uint32_t code) const {
     }
     return nullptr;
 }
-
+#include <iostream>
 std::vector<std::shared_ptr<Vertex>> Graph::prim(const std::shared_ptr<Vertex>& s) const {
     std::vector<std::shared_ptr<Vertex>> ans;
     /// Init the values
@@ -32,8 +33,9 @@ std::vector<std::shared_ptr<Vertex>> Graph::prim(const std::shared_ptr<Vertex>& 
     Vertex* start = s.get();
     start->setDist(0);
     q.insert(start);
-
+    uint32_t count = 0;
     while (!q.empty()) {
+        std::cout << count++ << "\n";
         /// The vertex on the top is always relaxed, that is why we can add it to the answer.
         Vertex* minVertex = q.extractMin();
         minVertex->setVisited(true);
@@ -109,4 +111,31 @@ bool Graph::triangular_approximation(std::shared_ptr<Vertex>& s, const std::shar
     return true;
 }
 
+#include <iostream>
+void Graph::fully_connected(uint64_t& num_edges) {
+    std::unordered_map<uint32_t, std::shared_ptr<Vertex>> all;
+    for (const std::shared_ptr<Vertex>& v : vertexSet) all.insert(std::make_pair(v->getCode(), v));
+    uint32_t count = 0;
+    for (const std::shared_ptr<Vertex>& v : vertexSet){
+        std::unordered_map<uint32_t, std::shared_ptr<Vertex>> temp;
+        for (const std::shared_ptr<Edge>& e : v->getAdj()){
+            temp.insert(std::make_pair(e->getDest()->getCode(), e->getDest()));
+        }
+        for (const std::pair<uint32_t, std::shared_ptr<Vertex>>& pair : all){
+            if (pair.second->getCode() == v->getCode()) continue;
+            auto itr = temp.find(pair.first);
+            if (itr == temp.end()){
+                double dist = haversine(v->getCoordinates(), pair.second->getCoordinates());
+                pair.second->addEdge(pair.second, v, dist);
+                v->addEdge(v, pair.second, dist);
+                num_edges += 2;
+                if (count == 1000000){
+                    std::cout << num_edges << "\n";
+                    count = 0;
+                }
+                count++;
+            }
+        }
+    }
+}
 

@@ -32,6 +32,7 @@ public:
      */
     std::shared_ptr<Vertex> findVertex(uint32_t code) const;
     bool triangular_approximation(std::shared_ptr<Vertex>& s, const std::shared_ptr<Vertex>& d, std::vector<std::shared_ptr<Edge>>& path) const;
+    void fully_connected(uint64_t& num_edges);
 };
 
 #endif

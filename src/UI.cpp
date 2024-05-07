@@ -1,5 +1,6 @@
 #include "../header/UI.h"
 #include <iostream>
+#include <iomanip>
 
 std::string getNewPath(){
     std::cout << "Enter the new Path. Keep in mind that either the path is absolute or, if relative, it is in relation to where the executable is.\n";
@@ -86,5 +87,5 @@ void displayPath(const std::vector<std::shared_ptr<Edge>>& path){
         if (e->getDest()->getCode() != path.front()->getOrig()->getCode()) std::cout << " - ";
         dist += e->getWeight();
     }
-    std::cout << "\nThe total distance is: " << dist << "\n";
+    std::cout << "\nThe total distance is: " << std::fixed << std::setprecision(2) << dist << "\n";
 }

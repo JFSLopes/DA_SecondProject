@@ -7,10 +7,11 @@
 void App::init() {
     while(true){
         std::string nodes = "nodes.csv";
-        std::string edges = "tourism.csv";
-        std::string path = "../Dataset/Toy/";
+        std::string edges = "edges.csv";
+        std::string path = "../Dataset/Real-world/graph3/";
         bool header = true;
-        uint32_t num_nodes = 25;
+        bool edges_only = false;
+        uint32_t num_nodes = 100000;
         g = std::make_unique<Graph>();
 
 
@@ -19,7 +20,7 @@ void App::init() {
 
 
         //displayChooseFiles(edges, nodes, header, num_nodes, path);
-        if (!FileParse::readFiles(g, edges, nodes, header, num_nodes, path, true)){
+        if (!FileParse::readFiles(g, edges, nodes, header, num_nodes, path, edges_only)){
             std::cout << "Something went wrong while reading the files. Make sure the names and path are correct.\n";
             continue;
         }
@@ -38,18 +39,12 @@ void App::init() {
 }
 
 bool App::functionalities() {
-
-    std::vector<std::shared_ptr<Vertex>> vec = g->getVertexSet();
-    std::cout << "Number of vertex: " << vec.size() << "\n";
-    int count = 0;
-    for (const auto& x : vec){
-        for (auto y : x->getAdj()){
-            count++;
-        }
+    num_nodes = g->getVertexSet().size();
+    for (const std::shared_ptr<Vertex>& v : g->getVertexSet()){
+        num_edges += v->getAdj().size();
     }
-    std::cout << "Number of edges: " << count << "\n";
-
-
+    std::cout << "Number of vertex: " << num_nodes << "\n";
+    std::cout << "Number of edges: " << num_edges << "\n";
 
     while (true){
         displayFunctionalities();
@@ -145,17 +140,32 @@ void App::backtracking() const {
     std::cout << "Time taken: " << duration_seconds << " seconds\n";
 }
 
-void App::triangular_approximation() const {
+void App::triangular_approximation(){
+    auto start_time = std::chrono::steady_clock::now(); // Record start time
+
+
     for (const std::shared_ptr<Vertex>& vertex : g->getVertexSet()){
         vertex->setVisited(false);
     }
     std::shared_ptr<Vertex> s = g->findVertex(0);
     std::vector<std::shared_ptr<Edge>> path;
+    make_fully_connected();
     if (!g->triangular_approximation(s, s, path)){
         std::cout << "Is not possible to do the approximation\n";
         return;
     }
     displayPath(path);
+
+    auto end_time = std::chrono::steady_clock::now(); // Record end time
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time); // Calculate duration
+    double seconds = duration.count() / 1000.0; // Convert milliseconds to seconds
+    std::cout << "Time taken: " << seconds << " seconds\n";
+}
+
+void App::make_fully_connected() {
+    if (num_nodes * (num_nodes - 1) == num_edges) return;
+    g->fully_connected(num_edges);
+    std::cout << "Number edges -> " << num_edges << "\n\n";
 }
 
 void App::other_heuristic() const {
