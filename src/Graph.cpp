@@ -34,9 +34,7 @@ std::vector<std::shared_ptr<Vertex>> Graph::prim(const std::shared_ptr<Vertex>& 
     Vertex* start = s.get();
     start->setDist(0);
     q.insert(start);
-    uint32_t count = 0;
     while (!q.empty()) {
-        std::cout << count++ << "\n";
         /// The vertex on the top is always relaxed, that is why we can add it to the answer.
         Vertex* minVertex = q.extractMin();
         minVertex->setVisited(true);
@@ -102,11 +100,9 @@ bool Graph::triangular_approximation(std::shared_ptr<Vertex>& s, std::vector<std
     return true;
 }
 
-#include <iostream>
 void Graph::fully_connected(uint64_t& num_edges) {
     std::unordered_map<uint32_t, std::shared_ptr<Vertex>> all;
     for (const std::shared_ptr<Vertex>& v : vertexSet) all.insert(std::make_pair(v->getCode(), v));
-    uint32_t count = 0;
     for (const std::shared_ptr<Vertex>& v : vertexSet){
         std::unordered_map<uint32_t, std::shared_ptr<Vertex>> temp;
         for (const std::shared_ptr<Edge>& e : v->getAdj()){
@@ -120,11 +116,6 @@ void Graph::fully_connected(uint64_t& num_edges) {
                 pair.second->addEdge(pair.second, v, dist);
                 v->addEdge(v, pair.second, dist);
                 num_edges += 2;
-                if (count == 1000000){
-                    std::cout << num_edges << "\n";
-                    count = 0;
-                }
-                count++;
             }
         }
     }

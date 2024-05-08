@@ -3,6 +3,10 @@
 
 Coordinates::Coordinates(double lat, double lon) : lat(lat), lon(lon) {}
 
+double Coordinates::getLat() const {
+    return lat;
+}
+
 double haversine(const Coordinates& c1, const Coordinates& c2){
     double lon1_rad = c1.lon * M_PI / 180.0;
     double lat1_rad = c1.lat * M_PI / 180.0;

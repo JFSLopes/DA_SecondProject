@@ -7,11 +7,11 @@
 void App::init() {
     while(true){
         std::string nodes = "nodes.csv";
-        std::string edges = "edges_600.csv";
-        std::string path = "../Dataset/Fully-connected/";
-        bool header = false;
-        bool edges_only = false;
-        uint32_t num_nodes_file = 600;
+        std::string edges = "edges.csv";
+        std::string path = "../Dataset/Real-world/graph1/";
+        bool header = true;
+        bool edges_only = true;
+        uint32_t num_nodes_file = 1000;
         g = std::make_unique<Graph>();
 
         // Start measuring time
@@ -148,7 +148,10 @@ void App::triangular_approximation(){
     }
     std::shared_ptr<Vertex> s = g->findVertex(0);
     std::vector<std::shared_ptr<Edge>> path;
-    //make_fully_connected();
+    if (!make_fully_connected()){
+        std::cout << "Is not possible to do the approximation\n";
+        return;
+    }
     if (!g->triangular_approximation(s, path)){
         std::cout << "Is not possible to do the approximation\n";
         return;
@@ -161,10 +164,11 @@ void App::triangular_approximation(){
     std::cout << "Time taken: " << seconds << " seconds\n";
 }
 
-void App::make_fully_connected() {
-    if (num_nodes * (num_nodes - 1) == num_edges) return;
+bool App::make_fully_connected() {
+    if (num_nodes * (num_nodes - 1) == num_edges) return true;
+    if (!g->getVertexSet().empty() and g->getVertexSet().front()->getCoordinates().getLat() == DBL_MAX) return false;
     g->fully_connected(num_edges);
-    std::cout << "Number edges -> " << num_edges << "\n\n";
+    return (num_nodes * (num_nodes - 1) == num_edges);
 }
 
 void App::other_heuristic(){
@@ -174,7 +178,10 @@ void App::other_heuristic(){
 
     std::shared_ptr<Vertex> s = g->findVertex(0);
     std::vector<std::shared_ptr<Edge>> hamiltonian;
-    make_fully_connected();
+    if (!make_fully_connected()){
+        std::cout << "Is not possible to do the approximation\n";
+        return;
+    }
     g->Christofides(s, hamiltonian);
     displayPath(hamiltonian);
 
@@ -192,7 +199,10 @@ void App::nearest_neighbour() {
 
     std::shared_ptr<Vertex> s = g->findVertex(0);
     std::vector<std::shared_ptr<Edge>> hamiltonian;
-    make_fully_connected();
+    if (!make_fully_connected()){
+        std::cout << "Is not possible to do the approximation\n";
+        return;
+    }
     g->nearest_neighbour(s, hamiltonian);
     displayPath(hamiltonian);
 

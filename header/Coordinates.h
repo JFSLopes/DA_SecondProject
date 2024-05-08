@@ -13,6 +13,7 @@ private:
     double lon; ///< stores the longitude of a coordinate
 public:
     Coordinates (double , double );
+    double getLat() const;
     /**
      * @brief Calculates the distance between two given coordinates
      *

@@ -25,7 +25,7 @@ private:
             double& path_sum,
             double& best_sum) const;
 
-    void make_fully_connected();
+    bool make_fully_connected();
 public:
     /**
      * @brief Allows the application to be initialized the right way
