@@ -7,11 +7,11 @@
 void App::init() {
     while(true){
         std::string nodes = "nodes.csv";
-        std::string edges = "edges_75.csv";
+        std::string edges = "edges_600.csv";
         std::string path = "../Dataset/Fully-connected/";
         bool header = false;
         bool edges_only = false;
-        uint32_t num_nodes_file = 75;
+        uint32_t num_nodes_file = 600;
         g = std::make_unique<Graph>();
 
         // Start measuring time
@@ -28,10 +28,6 @@ void App::init() {
         // Calculate duration
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
         std::cout << "Time taken by FileParse::readFiles: " << duration << " milliseconds\n";
-
-        std::shared_ptr<Vertex> v1 = g->getVertexSet()[7];
-        std::shared_ptr<Vertex> v2 = g->getVertexSet()[12];
-        std::cout << "Dist: (" << v1->getCode() << ", " << v2->getCode() << ") -> " << std::fixed << haversine(v1->getCoordinates(), v2->getCoordinates()) << "\n";
 
         bool stay = functionalities();
         if (!stay) break;

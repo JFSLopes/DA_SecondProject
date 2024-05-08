@@ -234,6 +234,7 @@ bool Graph::nearest_neighbour(const std::shared_ptr<Vertex> &s, std::vector<std:
     for (const std::shared_ptr<Vertex>& v : vertexSet) v->setVisited(false);
 
     std::shared_ptr<Vertex> curr = s;
+    curr->setVisited(true);
     while (true){
         std::vector<std::shared_ptr<Edge>> edges = curr->getAdj();
         std::sort(edges.begin(), edges.end(), [](const std::shared_ptr<Edge>& e1, const std::shared_ptr<Edge>& e2) {return e1->getWeight() < e2->getWeight();});
