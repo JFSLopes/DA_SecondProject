@@ -7,31 +7,31 @@
 void App::init() {
     while(true){
         std::string nodes = "nodes.csv";
-        std::string edges = "edges.csv";
-        std::string path = "../Dataset/Real-world/graph2/";
-        bool header = true;
+        std::string edges = "edges_75.csv";
+        std::string path = "../Dataset/Fully-connected/";
+        bool header = false;
         bool edges_only = false;
-        uint32_t num_nodes = 100000;
+        uint32_t num_nodes_file = 75;
         g = std::make_unique<Graph>();
-
 
         // Start measuring time
         auto startTime = std::chrono::high_resolution_clock::now();
 
 
         //displayChooseFiles(edges, nodes, header, num_nodes, path);
-        if (!FileParse::readFiles(g, edges, nodes, header, num_nodes, path, edges_only)){
+        if (!FileParse::readFiles(g, edges, nodes, header, num_nodes_file, path, edges_only)){
             std::cout << "Something went wrong while reading the files. Make sure the names and path are correct.\n";
             continue;
         }
-
 
         auto endTime = std::chrono::high_resolution_clock::now();
         // Calculate duration
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
         std::cout << "Time taken by FileParse::readFiles: " << duration << " milliseconds\n";
 
-
+        std::shared_ptr<Vertex> v1 = g->getVertexSet()[7];
+        std::shared_ptr<Vertex> v2 = g->getVertexSet()[12];
+        std::cout << "Dist: (" << v1->getCode() << ", " << v2->getCode() << ") -> " << std::fixed << haversine(v1->getCoordinates(), v2->getCoordinates()) << "\n";
 
         bool stay = functionalities();
         if (!stay) break;
@@ -59,9 +59,12 @@ bool App::functionalities() {
                 other_heuristic();
                 break;
             case 4:
-                TSP_Real_World();
+                nearest_neighbour();
                 break;
             case 5:
+                TSP_Real_World();
+                break;
+            case 6:
                 held_karp();
                 break;
             case 8:
@@ -149,8 +152,8 @@ void App::triangular_approximation(){
     }
     std::shared_ptr<Vertex> s = g->findVertex(0);
     std::vector<std::shared_ptr<Edge>> path;
-    make_fully_connected();
-    if (!g->triangular_approximation(s, s, path)){
+    //make_fully_connected();
+    if (!g->triangular_approximation(s, path)){
         std::cout << "Is not possible to do the approximation\n";
         return;
     }
@@ -168,8 +171,41 @@ void App::make_fully_connected() {
     std::cout << "Number edges -> " << num_edges << "\n\n";
 }
 
-void App::other_heuristic() const {
+void App::other_heuristic(){
+    auto start_time = std::chrono::steady_clock::now(); // Record start time
 
+
+
+    std::shared_ptr<Vertex> s = g->findVertex(0);
+    std::vector<std::shared_ptr<Edge>> hamiltonian;
+    make_fully_connected();
+    g->Christofides(s, hamiltonian);
+    displayPath(hamiltonian);
+
+
+
+    auto end_time = std::chrono::steady_clock::now(); // Record end time
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time); // Calculate duration
+    double seconds = duration.count() / 1000.0; // Convert milliseconds to seconds
+    std::cout << "Time taken: " << seconds << " seconds\n";
+}
+
+void App::nearest_neighbour() {
+    auto start_time = std::chrono::steady_clock::now(); // Record start time
+
+
+    std::shared_ptr<Vertex> s = g->findVertex(0);
+    std::vector<std::shared_ptr<Edge>> hamiltonian;
+    make_fully_connected();
+    g->nearest_neighbour(s, hamiltonian);
+    displayPath(hamiltonian);
+
+
+
+    auto end_time = std::chrono::steady_clock::now(); // Record end time
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time); // Calculate duration
+    double seconds = duration.count() / 1000.0; // Convert milliseconds to seconds
+    std::cout << "Time taken: " << seconds << " seconds\n";
 }
 
 void App::held_karp() const {

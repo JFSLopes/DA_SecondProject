@@ -1,6 +1,6 @@
 #include "../header/Vertex.h"
 
-Vertex::Vertex(uint32_t code, double lat, double lon) : code(code), coordinates(Coordinates(lat, lon)) {}
+Vertex::Vertex(uint32_t code, double lat, double lon) : code(code), coordinates(Coordinates(lat, lon)), in(0), out(0) {}
 
 uint32_t Vertex::getCode() const {
     return code;
@@ -36,6 +36,22 @@ void Vertex::setDist(double distance) {
 
 void Vertex::setPath(std::shared_ptr<Edge> e) {
     path = e;
+}
+
+void Vertex::setIn(uint32_t value) {
+    in = value;
+}
+
+void Vertex::setOut(uint32_t value) {
+    out = value;
+}
+
+uint32_t Vertex::getIn() const {
+    return in;
+}
+
+uint32_t Vertex::getOut() const {
+    return out;
 }
 
 void Vertex::addEdge(const std::shared_ptr<Vertex> &s, const std::shared_ptr<Vertex> &d, double distance) {

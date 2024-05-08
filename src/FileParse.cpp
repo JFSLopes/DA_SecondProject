@@ -48,7 +48,7 @@ void FileParse::readNodes(std::unique_ptr<Graph> &g, std::ifstream &in, uint32_t
         double lon = std::stod(longitude);
         double lat = std::stod(latitude);
 
-        std::shared_ptr<Vertex> vertex = std::make_shared<Vertex>(ID, lon, lat);
+        std::shared_ptr<Vertex> vertex = std::make_shared<Vertex>(ID, lat, lon);
         g->addVertex(vertex);
         m.insert(std::make_pair(ID, vertex));
     }

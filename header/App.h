@@ -37,7 +37,17 @@ public:
      */
     void backtracking() const;
     void triangular_approximation();
-    void other_heuristic() const;
+    /**
+     * @brief Christofides algorithm
+     *
+     * The algorithm has the following steps
+     *      1. Get a MST. Let's call it T
+     *      2. Select the vertices from the mst with odd degree. Let's call it O
+     *      3. Find a minimum weight perfect matching on the vertices on O. Let's call it M
+     *      4. Combine M and T
+     */
+    void other_heuristic();
+    void nearest_neighbour();
     void held_karp() const;
     void TSP_Real_World() const;
 };

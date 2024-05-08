@@ -3,24 +3,19 @@
 
 Coordinates::Coordinates(double lat, double lon) : lat(lat), lon(lon) {}
 
-double Coordinates::getLat() const {
-    return lat;
-}
-
-double Coordinates::getLon() const {
-    return lon;
-}
-
 double haversine(const Coordinates& c1, const Coordinates& c2){
-    double dLat = (c2.lat - c1.lat) * M_PI / 180.0;
-    double dLon = (c2.lon - c1.lon) * M_PI / 180.0;
+    double lon1_rad = c1.lon * M_PI / 180.0;
+    double lat1_rad = c1.lat * M_PI / 180.0;
+    double lon2_rad = c2.lon * M_PI / 180.0;
+    double lat2_rad = c2.lat * M_PI / 180.0;
 
-    /// convert to radians
-    double lat1 = (c1.lat) * M_PI / 180.0;
-    double lat2 = (c2.lat) * M_PI / 180.0;
+    double dlon = lon2_rad - lon1_rad;
+    double dlat = lat2_rad - lat1_rad;
+    double a = pow(sin(dlat / 2), 2) + cos(lat1_rad) * cos(lat2_rad) * pow(sin(dlon / 2), 2);
+    double c = 2 * atan2(sqrt(a), sqrt(1 - a));
 
-    double a = pow(sin(dLat / 2), 2) + pow(sin(dLon / 2), 2) * cos(lat1) * cos(lat2);
-    double rad = 6371;
-    double c = 2 * asin(sqrt(a));
-    return rad * c;
+    const double earth_radius_m = 6371000.0;
+
+    double distance = earth_radius_m * c;
+    return distance;
 }

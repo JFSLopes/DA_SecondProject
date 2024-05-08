@@ -70,9 +70,10 @@ void displayFunctionalities(){
     std::cout << "Choose one of the following options:\n"
               << "\t1. Backtracking algorithm;\n"
               << "\t2. Triangular Approximation Heuristic;\n"
-              << "\t3. Other Heuristics;\n"
-              << "\t4. TSP in the Real World;\n"
-              << "\t5. Using Held-Karp (Dynamic Programming);\n"
+              << "\t3. Other Heuristics (Christofides);\n"
+              << "\t4. Other Heuristics (Nearest neighbour);\n"
+              << "\t5. TSP in the Real World;\n"
+              << "\t6. Using Held-Karp (Dynamic Programming);\n"
               << "\t8. Load other files.\n"
               << "\t9. Close the app.\n";
     std::cout << "[1..9]: ";

@@ -5,6 +5,7 @@ class Vertex;
 
 #include "Vertex.h"
 #include <vector>
+#include <map>
 
 class Graph{
 private:
@@ -12,6 +13,9 @@ private:
 
     std::vector<std::shared_ptr<Vertex>> prim(const std::shared_ptr<Vertex>& s) const;
     void pre_order(std::shared_ptr<Vertex>& s, std::vector<std::shared_ptr<Vertex>>& pre_order) const;
+    void set_in_out_degree();
+    void findMinimumWeightPerfectMatching();
+    void formEulerianCircuit(std::vector<std::shared_ptr<Vertex>>& visitedVertices);
 public:
     /**
      * @brief Returns the vertex set of the graph.
@@ -31,8 +35,10 @@ public:
      * @return Returns a pointer to the vertex being looked for or nullptr otherwise
      */
     std::shared_ptr<Vertex> findVertex(uint32_t code) const;
-    bool triangular_approximation(std::shared_ptr<Vertex>& s, const std::shared_ptr<Vertex>& d, std::vector<std::shared_ptr<Edge>>& path) const;
+    bool triangular_approximation(std::shared_ptr<Vertex>& s, std::vector<std::shared_ptr<Edge>>& path) const;
     void fully_connected(uint64_t& num_edges);
+    bool Christofides(const std::shared_ptr<Vertex>& s, std::vector<std::shared_ptr<Edge>>& hamiltonian);
+    bool nearest_neighbour(const std::shared_ptr<Vertex>& s, std::vector<std::shared_ptr<Edge>>& hamiltonian);
 };
 
 #endif
