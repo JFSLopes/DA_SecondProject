@@ -1,6 +1,6 @@
 #include "../header/FileParse.h"
-#include "../header/UI.h"
 #include <iostream>
+#include <string>
 #include <sstream>
 #include <cfloat>
 
@@ -88,8 +88,10 @@ void FileParse::readEdges(std::unique_ptr<Graph> &g, std::ifstream &in, bool hea
 
 void FileParse::readOnlyEdges(std::unique_ptr<Graph> &g, std::ifstream &in, bool header) {
     std::string line;
+    char line_terminator = '\n';
     if (header){
         std::getline(in, line);
+        if (line.find("distancia,") != std::string::npos) line_terminator = ','; /// Because the tourism is different from the others
     }
 
     while(std::getline(in, line)){
@@ -98,7 +100,7 @@ void FileParse::readOnlyEdges(std::unique_ptr<Graph> &g, std::ifstream &in, bool
 
         std::getline(aux, origen, ',');
         std::getline(aux, destination, ',');
-        std::getline(aux, distance);
+        std::getline(aux, distance, line_terminator);
 
         uint32_t orig = std::stoi(origen);
         uint32_t dest = std::stoi(destination);

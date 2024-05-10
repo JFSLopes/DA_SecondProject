@@ -48,7 +48,6 @@ public:
      */
     void other_heuristic();
     void nearest_neighbour();
-    void held_karp() const;
     void TSP_Real_World() const;
 };
 

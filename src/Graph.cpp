@@ -93,9 +93,11 @@ bool Graph::triangular_approximation(std::shared_ptr<Vertex>& s, std::vector<std
 
     for (size_t i = 0; i < mst.size() - 1; i++) {
         std::shared_ptr<Edge> e = mst[i]->findEdge(mst[i + 1]);
+        if (e == nullptr) return false;
         path.push_back(e);
     }
     std::shared_ptr<Edge> last_edge = mst.back()->findEdge(s);
+    if (last_edge == nullptr) return false;
     path.push_back(last_edge);
     return true;
 }
@@ -160,9 +162,11 @@ bool Graph::Christofides(const std::shared_ptr<Vertex>& s, std::vector<std::shar
 
     for (uint32_t k = 0; k < final_path.size() - 1; k++){
         std::shared_ptr<Edge> e = final_path[k]->findEdge(final_path[k+1]);
+        if (e == nullptr) return false;
         hamiltonian.push_back(e);
     }
     std::shared_ptr<Edge> last_edge = final_path.back()->findEdge(s);
+    if (last_edge == nullptr) return false;
     hamiltonian.push_back(last_edge);
     return true;
 }
@@ -243,6 +247,7 @@ bool Graph::nearest_neighbour(const std::shared_ptr<Vertex> &s, std::vector<std:
     }
     if (!hamiltonian.empty()){
         std::shared_ptr<Edge> last_edge = hamiltonian.back()->getDest()->findEdge(s);
+        if (last_edge == nullptr) return false;
         hamiltonian.push_back(last_edge);
     }
     return hamiltonian.size() == vertexSet.size();

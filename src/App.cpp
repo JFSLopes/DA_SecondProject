@@ -3,31 +3,23 @@
 #include "../header/FileParse.h"
 #include <iostream>
 #include <cfloat>
+#include <memory>
 
 void App::init() {
     while(true){
-        std::string nodes = "nodes.csv";
-        std::string edges = "edges.csv";
-        std::string path = "../Dataset/Real-world/graph1/";
-        bool header = true;
-        bool edges_only = true;
-        uint32_t num_nodes_file = 1000;
         g = std::make_unique<Graph>();
+        std::string nodes;
+        std::string edges;
+        std::string path;
+        bool header;
+        bool edges_only;
+        uint32_t num_nodes_file;
 
-        // Start measuring time
-        auto startTime = std::chrono::high_resolution_clock::now();
-
-
-        //displayChooseFiles(edges, nodes, header, num_nodes, path);
+        displayChooseFiles(edges, nodes, header, num_nodes_file, path, edges_only);
         if (!FileParse::readFiles(g, edges, nodes, header, num_nodes_file, path, edges_only)){
             std::cout << "Something went wrong while reading the files. Make sure the names and path are correct.\n";
             continue;
         }
-
-        auto endTime = std::chrono::high_resolution_clock::now();
-        // Calculate duration
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count();
-        std::cout << "Time taken by FileParse::readFiles: " << duration << " milliseconds\n";
 
         bool stay = functionalities();
         if (!stay) break;
@@ -35,6 +27,8 @@ void App::init() {
 }
 
 bool App::functionalities() {
+    num_nodes = 0;
+    num_edges = 0;
     num_nodes = g->getVertexSet().size();
     for (const std::shared_ptr<Vertex>& v : g->getVertexSet()){
         num_edges += v->getAdj().size();
@@ -59,9 +53,6 @@ bool App::functionalities() {
                 break;
             case 5:
                 TSP_Real_World();
-                break;
-            case 6:
-                held_karp();
                 break;
             case 8:
                 return true;
@@ -214,10 +205,12 @@ void App::nearest_neighbour() {
     std::cout << "Time taken: " << seconds << " seconds\n";
 }
 
-void App::held_karp() const {
-
-}
-
 void App::TSP_Real_World() const {
 
+    std::vector<std::shared_ptr<Edge>> hamiltonian;
+    std::shared_ptr<Vertex> s = ask_vertex(g);
+    if (!g->nearest_neighbour(s, hamiltonian)){
+        std::cout << "No path found.\n";
+    }
+    else displayPath(hamiltonian);
 }

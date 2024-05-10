@@ -4,6 +4,7 @@
 class Edge;
 
 #include "Edge.h"
+#include "Graph.h"
 #include <string>
 #include <memory>
 
@@ -31,8 +32,9 @@ char getYesNoAnswer();
  */
 uint32_t askNumber(uint32_t upperLimit);
 
-void displayChooseFiles(std::string& edges, std::string& nodes, bool& header, uint32_t& num_nodes, std::string& path);
+void displayChooseFiles(std::string& edges, std::string& nodes, bool& header, uint32_t& num_nodes, std::string& path, bool& edges_only);
 void displayFunctionalities();
 void displayPath(const std::vector<std::shared_ptr<Edge>>& path);
+std::shared_ptr<Vertex> ask_vertex(const std::unique_ptr<Graph>& g);
 
 #endif

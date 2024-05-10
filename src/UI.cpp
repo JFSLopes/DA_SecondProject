@@ -37,10 +37,10 @@ uint32_t askNumber(uint32_t upperLimit){
 
             uint32_t number = std::stoi(value);
 
-            if (number >= 1 && number <= upperLimit) {
+            if (number <= upperLimit) {
                 return number;
             } else {
-                std::cout << "Invalid input. The number must be between 1 and " << upperLimit << ": ";
+                std::cout << "Invalid input. The number must be between 0 and " << upperLimit << ": ";
             }
         } catch (const std::invalid_argument& e) {
             std::cout << "Invalid input. Please enter a valid number: ";
@@ -50,13 +50,22 @@ uint32_t askNumber(uint32_t upperLimit){
     } while (true);
 }
 
-void displayChooseFiles(std::string& edges, std::string& nodes, bool& header, uint32_t& num_nodes, std::string& path){
-    nodes = getNewFileName("nodes");
-    std::cout << "How many nodes are in the file: ";
-    num_nodes = askNumber(UINT32_MAX);
-    edges = getNewFileName("Edges");
-    std::cout << "Does the file " << edges << "has a header?\n";
-    header = getYesNoAnswer();
+void displayChooseFiles(std::string& edges, std::string& nodes, bool& header, uint32_t& num_nodes, std::string& path, bool& edges_only){
+    std::cout << "Does it exist a nodes file?\n";
+    edges_only = !getYesNoAnswer();
+    if (edges_only){
+        edges = getNewFileName("Edges");
+        std::cout << "Does the file " << edges << " has a header?\n";
+        header = getYesNoAnswer();
+    }
+    else{
+        nodes = getNewFileName("nodes");
+        std::cout << "How many nodes are in the file: ";
+        num_nodes = askNumber(UINT32_MAX);
+        edges = getNewFileName("Edges");
+        std::cout << "Does the file " << edges << " has a header?\n";
+        header = getYesNoAnswer();
+    }
 
     std::cout << "Are the files in the same folder where the executable is?\n";
     bool answer = getYesNoAnswer();
@@ -73,7 +82,6 @@ void displayFunctionalities(){
               << "\t3. Other Heuristics (Christofides);\n"
               << "\t4. Other Heuristics (Nearest neighbour);\n"
               << "\t5. TSP in the Real World;\n"
-              << "\t6. Using Held-Karp (Dynamic Programming);\n"
               << "\t8. Load other files.\n"
               << "\t9. Close the app.\n";
     std::cout << "[1..9]: ";
@@ -89,4 +97,17 @@ void displayPath(const std::vector<std::shared_ptr<Edge>>& path){
         dist += e->getWeight();
     }
     std::cout << "\nThe total distance is: " << std::fixed << std::setprecision(2) << dist << "\n";
+}
+
+std::shared_ptr<Vertex> ask_vertex(const std::unique_ptr<Graph>& g){
+    std::cout << "Enter the source vertex index: ";
+    while (true){
+        uint32_t index = askNumber(UINT32_MAX);
+        std::shared_ptr<Vertex> v = g->findVertex(index);
+        if (v == nullptr){
+            std::cout << "Invalid index. The vertex does not exist. Enter a valid one: ";
+            continue;
+        }
+        return v;
+    }
 }
