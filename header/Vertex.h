@@ -24,6 +24,9 @@ private:
     uint32_t in; ///< Number of in going edges
     uint32_t out; ///< Number of out going edges
 public:
+    /**
+     * @brief Vertex constructor
+     */
     Vertex(uint32_t info, double lat, double lon);
     /**
      * @return Return the vertex code

@@ -8,8 +8,8 @@ class Vertex;
 #include <map>
 
 /**
- * @struct metrics
- * @brief Used to store the metrics of the graph
+ * @class Graph
+ * @brief Stores information in a graph structure
  */
 class Graph{
 private:
@@ -52,7 +52,7 @@ public:
     const std::vector<std::shared_ptr<Vertex>>& getVertexSet() const;
     /**
      * @brief Adds a vertex to the graph
-     * @param Vertex Pointer to the vertex being added.
+     * @param vertex Pointer to the vertex being added.
      */
     void addVertex(const std::shared_ptr<Vertex>& vertex);
     /**

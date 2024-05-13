@@ -12,6 +12,9 @@ private:
     double lat; ///< stores the latitude of a coordinate
     double lon; ///< stores the longitude of a coordinate
 public:
+    /**
+     * @brief Coordinates constructor
+     */
     Coordinates (double , double );
     /**
      * @brief Returns the latitude
