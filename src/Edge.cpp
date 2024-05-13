@@ -23,7 +23,3 @@ bool Edge::isSelected() const {
 void Edge::setSelected(bool cond) {
     selected = cond;
 }
-
-void Edge::setWeight(double w) {
-    weight = w;
-}

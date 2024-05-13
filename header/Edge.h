@@ -6,12 +6,16 @@ class Vertex;
 #include "Vertex.h"
 #include <memory>
 
+/**
+ * @class Edge
+ * @brief Allows to represent the information of any edge on the graph
+ */
 class Edge {
 private:
-    std::shared_ptr<Vertex> orig; /// Represents the destination Vertex of the edge
-    std::shared_ptr<Vertex> dest; /// Represents the destination Vertex of the edge
-    double weight; /// Represents the weight of the edge
-    bool selected;
+    std::shared_ptr<Vertex> orig; ///< Represents the destination Vertex of the edge
+    std::shared_ptr<Vertex> dest; ///< Represents the destination Vertex of the edge
+    double weight; ///< Represents the weight of the edge
+    bool selected; ///< Represents if the edge was selected during an algorithm
 public:
     /**
      * @brief Edge Constructor
@@ -32,9 +36,15 @@ public:
      * @return Returns the weight of the Edge
      */
     double getWeight() const;
+    /**
+     * @return Returns if the edge is selected
+     */
     bool isSelected() const;
+    /**
+     * @brief Allows to change the selected parameter
+     * @param cond Value to be put in selected
+     */
     void setSelected(bool cond);
-    void setWeight(double w);
 };
 
 #endif
