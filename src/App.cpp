@@ -73,6 +73,9 @@ void App::find_best_hamiltonian(
         uint32_t size_hamiltonian,
         double& path_sum,
         double& best_sum) const{
+    if (path_sum >= best_sum){ /// Bounding function
+        return;
+    }
     s->setVisited(true);
 
     for (const std::shared_ptr<Edge>& e : s->getAdj()){

@@ -17,7 +17,7 @@ std::shared_ptr<Vertex> Graph::findVertex(uint32_t code) const {
     }
     return nullptr;
 }
-#include <iostream>
+
 std::vector<std::shared_ptr<Vertex>> Graph::prim(const std::shared_ptr<Vertex>& s) const {
     std::vector<std::shared_ptr<Vertex>> ans;
     /// Init the values
