@@ -103,10 +103,6 @@ void App::find_best_hamiltonian(
 }
 
 void App::backtracking() const {
-    // Start the timer
-    auto start_time = std::chrono::high_resolution_clock::now();
-
-
     uint32_t size_hamiltonian = g->getVertexSet().size();
     for (const std::shared_ptr<Vertex>& vertex : g->getVertexSet()){
         vertex->setVisited(false);
@@ -119,24 +115,9 @@ void App::backtracking() const {
     double path_sum = 0, best_sum = DBL_MAX;
     find_best_hamiltonian(s, s, curr_path, best_path, size_hamiltonian, path_sum, best_sum);
     displayPath(best_path);
-
-
-
-    // End the timer
-    auto end_time = std::chrono::high_resolution_clock::now();
-
-    // Calculate the duration in seconds
-    std::chrono::duration<double> duration = end_time - start_time;
-    double duration_seconds = duration.count();
-
-    // Output the time taken
-    std::cout << "Time taken: " << duration_seconds << " seconds\n";
 }
 
 void App::triangular_approximation(){
-    auto start_time = std::chrono::steady_clock::now(); // Record start time
-
-
     for (const std::shared_ptr<Vertex>& vertex : g->getVertexSet()){
         vertex->setVisited(false);
     }
@@ -151,11 +132,6 @@ void App::triangular_approximation(){
         return;
     }
     displayPath(path);
-
-    auto end_time = std::chrono::steady_clock::now(); // Record end time
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time); // Calculate duration
-    double seconds = duration.count() / 1000.0; // Convert milliseconds to seconds
-    std::cout << "Time taken: " << seconds << " seconds\n";
 }
 
 bool App::make_fully_connected() {
@@ -166,10 +142,6 @@ bool App::make_fully_connected() {
 }
 
 void App::other_heuristic(){
-    auto start_time = std::chrono::steady_clock::now(); // Record start time
-
-
-
     std::shared_ptr<Vertex> s = g->findVertex(0);
     std::vector<std::shared_ptr<Edge>> hamiltonian;
     if (!make_fully_connected()){
@@ -178,19 +150,9 @@ void App::other_heuristic(){
     }
     g->Christofides(s, hamiltonian);
     displayPath(hamiltonian);
-
-
-
-    auto end_time = std::chrono::steady_clock::now(); // Record end time
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time); // Calculate duration
-    double seconds = duration.count() / 1000.0; // Convert milliseconds to seconds
-    std::cout << "Time taken: " << seconds << " seconds\n";
 }
 
 void App::nearest_neighbour() {
-    auto start_time = std::chrono::steady_clock::now(); // Record start time
-
-
     std::shared_ptr<Vertex> s = g->findVertex(0);
     std::vector<std::shared_ptr<Edge>> hamiltonian;
     if (!make_fully_connected()){
@@ -199,13 +161,6 @@ void App::nearest_neighbour() {
     }
     g->nearest_neighbour(s, hamiltonian);
     displayPath(hamiltonian);
-
-
-
-    auto end_time = std::chrono::steady_clock::now(); // Record end time
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time); // Calculate duration
-    double seconds = duration.count() / 1000.0; // Convert milliseconds to seconds
-    std::cout << "Time taken: " << seconds << " seconds\n";
 }
 
 void App::TSP_Real_World() const {
