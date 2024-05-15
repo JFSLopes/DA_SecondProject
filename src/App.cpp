@@ -167,7 +167,20 @@ void App::TSP_Real_World() const {
 
     std::vector<std::shared_ptr<Edge>> hamiltonian;
     std::shared_ptr<Vertex> s = ask_vertex(g);
+    std::cout << "NN\n";
     if (!g->nearest_neighbour(s, hamiltonian)){
+        std::cout << "No path found.\n";
+    }
+    else displayPath(hamiltonian);
+    hamiltonian.clear();
+    std::cout << "\nChristofides\n";
+    if (!g->Christofides(s, hamiltonian)){
+        std::cout << "No path found.\n";
+    }
+    else displayPath(hamiltonian);
+    hamiltonian.clear();
+    std::cout << "\nTriangular\n";
+    if (!g->triangular_approximation(s, hamiltonian)){
         std::cout << "No path found.\n";
     }
     else displayPath(hamiltonian);

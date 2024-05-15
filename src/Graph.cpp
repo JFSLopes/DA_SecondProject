@@ -177,7 +177,9 @@ void Graph::findMinimumWeightPerfectMatching() {
     for (const std::shared_ptr<Vertex>& v: vertexSet){
         if ((v->getIn() + v->getOut()) % 2 != 0){
             for (const std::shared_ptr<Edge>& e : v->getAdj()){
-                all_edges.push_back(e);
+                if (!e->isSelected()) {
+                    all_edges.push_back(e);
+                }
             }
         }
     }
