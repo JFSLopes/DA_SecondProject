@@ -105,6 +105,8 @@ public:
      * @return Returns a pointer to the edge or nullptr if the edge does not exist
      */
     std::shared_ptr<Edge> findEdge(const std::shared_ptr<Vertex>& d) const;
+    void order_edges();
+    uint32_t getDegree() const;
 
 
     friend class MutablePriorityQueue<Vertex>;

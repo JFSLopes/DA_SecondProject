@@ -53,6 +53,12 @@ void displayFunctionalities();
  */
 void displayPath(const std::vector<std::shared_ptr<Edge>>& path);
 /**
+ * @brief Displays the path found along with its distance
+ *
+ * @param path Path to be displayed
+ */
+void displayPath(const std::vector<std::shared_ptr<Vertex>>& path);
+/**
  * @brief Asks the user a vertex
  *
  * @param g Pointer to the graph

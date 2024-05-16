@@ -99,6 +99,18 @@ void displayPath(const std::vector<std::shared_ptr<Edge>>& path){
     std::cout << "\nThe total distance is: " << std::fixed << std::setprecision(2) << dist << "\n";
 }
 
+void displayPath(const std::vector<std::shared_ptr<Vertex>>& path){
+    std::cout << "The following Hamiltonian path was found:\n";
+    double dist = 0;
+    for (uint32_t k = 0; k < path.size() - 1; k++){
+        std::shared_ptr<Edge> e = path[k]->findEdge(path[k+1]);
+        dist += e->getWeight();
+        std::cout << path[k]->getCode() << " - ";
+        if (k == path.size() - 2) std::cout << path[k+1]->getCode();
+    }
+    std::cout << "\nThe total distance is: " << std::fixed << std::setprecision(2) << dist << "\n";
+}
+
 std::shared_ptr<Vertex> ask_vertex(const std::unique_ptr<Graph>& g){
     std::cout << "Enter the source vertex index: ";
     while (true){

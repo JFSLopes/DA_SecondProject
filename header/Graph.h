@@ -92,6 +92,8 @@ public:
      * @return True if a hamiltonian was found, false otherwise
      */
     bool nearest_neighbour(const std::shared_ptr<Vertex>& s, std::vector<std::shared_ptr<Edge>>& hamiltonian);
+    bool nn_with_backtracking(const std::shared_ptr<Vertex>& s, std::vector<std::shared_ptr<Vertex>>& hamiltonian);
+    bool nn_backtracking(const std::shared_ptr<Vertex>& s, const std::shared_ptr<Vertex>& d, std::vector<std::shared_ptr<Vertex>>& path);
 };
 
 #endif

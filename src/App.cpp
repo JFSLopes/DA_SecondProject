@@ -8,14 +8,14 @@
 void App::init() {
     while(true){
         g = std::make_unique<Graph>();
-        std::string nodes;
-        std::string edges;
-        std::string path;
-        bool header;
-        bool edges_only;
-        uint32_t num_nodes_file;
+        std::string nodes = "nodes.csv";
+        std::string edges = "edges.csv";
+        std::string path = "../Dataset/Real-world/graph1/";
+        bool header = true;
+        bool edges_only = false;
+        uint32_t num_nodes_file = 5000;
 
-        displayChooseFiles(edges, nodes, header, num_nodes_file, path, edges_only);
+        //displayChooseFiles(edges, nodes, header, num_nodes_file, path, edges_only);
         if (!FileParse::readFiles(g, edges, nodes, header, num_nodes_file, path, edges_only)){
             std::cout << "Something went wrong while reading the files. Make sure the names and path are correct.\n";
             continue;
@@ -184,4 +184,11 @@ void App::TSP_Real_World() const {
         std::cout << "No path found.\n";
     }
     else displayPath(hamiltonian);
+    hamiltonian.clear();
+    std::vector<std::shared_ptr<Vertex>> path;
+    std::cout << "\nNN->Backtracking\n";
+    if (!g->nn_with_backtracking(s, path)){
+        std::cout << "No path found.\n";
+    }
+    else displayPath(path);
 }
