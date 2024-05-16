@@ -122,7 +122,7 @@ void Graph::fully_connected(uint64_t& num_edges) {
         }
     }
 }
-
+#include <iostream>
 void Graph::set_in_out_degree() {
     for (const std::shared_ptr<Vertex>& v: vertexSet){
         v->setVisited(false);
@@ -255,9 +255,6 @@ bool Graph::nearest_neighbour(const std::shared_ptr<Vertex> &s, std::vector<std:
     return hamiltonian.size() == vertexSet.size();
 }
 
-
-#include <iostream>
-
 bool Graph::nn_backtracking(const std::shared_ptr<Vertex> &s, const std::shared_ptr<Vertex>& d, std::vector<std::shared_ptr<Vertex>>& path) {
     s->setVisited(true);
     path.push_back(s);
@@ -274,8 +271,11 @@ bool Graph::nn_backtracking(const std::shared_ptr<Vertex> &s, const std::shared_
     path.pop_back();
     return false;
 }
-#include <set>
+
 bool Graph::nn_with_backtracking(const std::shared_ptr<Vertex> &s, std::vector<std::shared_ptr<Vertex>> &hamiltonian) {
+    std::cout << "Prim in\n";
+    prim(s);
+    std::cout << "Prim out\n";
     set_in_out_degree();
     for (const std::shared_ptr<Vertex>& v : vertexSet){
         v->order_edges();
@@ -285,76 +285,6 @@ bool Graph::nn_with_backtracking(const std::shared_ptr<Vertex> &s, std::vector<s
     hamiltonian.clear();
     std::cout << "Enter\n";
     if (!nn_backtracking(s, s, hamiltonian)) return false;
-
-
     std::cout << "Left\n";
-    std::set<uint32_t> set;
-    for (auto x : hamiltonian){
-        std::cout << x->getCode() << " - ";
-        set.insert(x->getCode());
-    }
-    std::cout << "\nSet size: " << set.size() << "\n";
     return true;
-    /*
-    uint32_t num_vertexes_hamiltonian = vertexSet.size() + 1;
-    std::stack<std::shared_ptr<Vertex>> s;
-    s.push(source);
-    uint32_t curr_size = 0;
-    std::vector<std::shared_ptr<Vertex>> path;
-    std::cout << "1\n";
-    int count = 4;
-    while (!s.empty() and count){
-        std::shared_ptr<Vertex> top = s.top();
-        top->setVisited(true);
-        curr_size++;
-        path.push_back(top);
-        bool found = false;
-        bool answer_found = false;
-        for (const std::shared_ptr<Edge>& e : top->getAdj()){
-            if (!e->getDest()->isVisited()){
-                s.push(e->getDest());
-                found = true;
-                break;
-            }
-            else if (curr_size == num_vertexes_hamiltonian - 1){ /// Check if the last vertex is connected to the source
-                std::cout << "b\n";
-                std::shared_ptr<Edge> edge = top->findEdge(source);
-                if (edge != nullptr){
-                    std::cout << "c\n";
-                    path.push_back(source);
-                    answer_found = true;
-                    break;
-                } else {
-                    for (auto x : path){
-                        std::cout << x->getCode() << " - ";
-                    }
-                    count--;
-                    std::cout << "\n";
-                    std::cout << "d\n";
-                    top->setVisited(false);
-                    path.pop_back();
-                    curr_size--;
-                    continue;
-                }
-            }
-        }
-        if (answer_found){
-            break;
-        }
-        if (!found){
-            std::cout << "4\n";
-            s.pop();
-            path.pop_back();
-            curr_size--;
-        }
-    }
-    if (path.size() != num_vertexes_hamiltonian){ /// No hamiltonian found
-        return false;
-    }
-    for (uint32_t k = 0; k < num_vertexes_hamiltonian - 1; k++){
-        std::shared_ptr<Edge> e = path[k]->findEdge(path[k+1]);
-        hamiltonian.push_back(e);
-    }
-    return true;
-     */
 }

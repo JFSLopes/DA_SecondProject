@@ -10,10 +10,10 @@ void App::init() {
         g = std::make_unique<Graph>();
         std::string nodes = "nodes.csv";
         std::string edges = "edges.csv";
-        std::string path = "../Dataset/Real-world/graph1/";
+        std::string path = "../Dataset/Real-world/graph3/";
         bool header = true;
         bool edges_only = false;
-        uint32_t num_nodes_file = 5000;
+        uint32_t num_nodes_file = 10000;
 
         //displayChooseFiles(edges, nodes, header, num_nodes_file, path, edges_only);
         if (!FileParse::readFiles(g, edges, nodes, header, num_nodes_file, path, edges_only)){
@@ -164,31 +164,21 @@ void App::nearest_neighbour() {
 }
 
 void App::TSP_Real_World() const {
-
-    std::vector<std::shared_ptr<Edge>> hamiltonian;
     std::shared_ptr<Vertex> s = ask_vertex(g);
-    std::cout << "NN\n";
-    if (!g->nearest_neighbour(s, hamiltonian)){
-        std::cout << "No path found.\n";
-    }
-    else displayPath(hamiltonian);
-    hamiltonian.clear();
-    std::cout << "\nChristofides\n";
-    if (!g->Christofides(s, hamiltonian)){
-        std::cout << "No path found.\n";
-    }
-    else displayPath(hamiltonian);
-    hamiltonian.clear();
-    std::cout << "\nTriangular\n";
-    if (!g->triangular_approximation(s, hamiltonian)){
-        std::cout << "No path found.\n";
-    }
-    else displayPath(hamiltonian);
-    hamiltonian.clear();
     std::vector<std::shared_ptr<Vertex>> path;
+
+    auto start = std::chrono::high_resolution_clock::now();
+
+
+
     std::cout << "\nNN->Backtracking\n";
     if (!g->nn_with_backtracking(s, path)){
         std::cout << "No path found.\n";
     }
     else displayPath(path);
+
+
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start);
+    std::cout << "Tempo de execução: " << duration.count() << " segundos\n";
 }
