@@ -51,6 +51,12 @@ uint32_t askNumber(uint32_t upperLimit){
 }
 
 void displayChooseFiles(std::string& edges, std::string& nodes, bool& header, uint32_t& num_nodes, std::string& path, bool& edges_only){
+    std::cout << "            ██╗      █████╗  █████╗ ██████╗ ██╗███╗  ██╗ ██████╗         ███████╗██╗██╗     ███████╗ ██████╗\n"
+                 "            ██║     ██╔══██╗██╔══██╗██╔══██╗██║████╗ ██║██╔════╝         ██╔════╝██║██║     ██╔════╝██╔════╝\n"
+                 "            ██║     ██║  ██║███████║██║  ██║██║██╔██╗██║██║  ██╗         █████╗  ██║██║     █████╗  ╚█████╗ \n"
+                 "            ██║     ██║  ██║██╔══██║██║  ██║██║██║╚████║██║  ╚██╗        ██╔══╝  ██║██║     ██╔══╝   ╚═══██╗\n"
+                 "            ███████╗╚█████╔╝██║  ██║██████╔╝██║██║ ╚███║╚██████╔╝        ██║     ██║███████╗███████╗██████╔╝\n"
+                 "            ╚══════╝ ╚════╝ ╚═╝  ╚═╝╚═════╝ ╚═╝╚═╝  ╚══╝ ╚═════╝         ╚═╝     ╚═╝╚══════╝╚══════╝╚═════╝ \n";
     std::cout << "Does it exist a nodes file?\n";
     edges_only = !getYesNoAnswer();
     if (edges_only){
@@ -74,8 +80,19 @@ void displayChooseFiles(std::string& edges, std::string& nodes, bool& header, ui
         if (!path.empty() and path.back() != '/') path += "/";
     }
 }
+/*
+
+ */
 
 void displayFunctionalities(){
+    std::cout << "              ████████╗ ██████╗██████╗          █████╗ ██╗      ██████╗  █████╗ ██████╗ ██╗████████╗██╗  ██╗███╗   ███╗ ██████╗\n"
+                 "              ╚══██╔══╝██╔════╝██╔══██╗        ██╔══██╗██║     ██╔════╝ ██╔══██╗██╔══██╗██║╚══██╔══╝██║  ██║████╗ ████║██╔════╝\n"
+                 "                 ██║   ╚█████╗ ██████╔╝ █████╗ ███████║██║     ██║  ██╗ ██║  ██║██████╔╝██║   ██║   ███████║██╔████╔██║╚█████╗ \n"
+                 "                 ██║    ╚═══██╗██╔═══╝  ╚════╝ ██╔══██║██║     ██║  ╚██╗██║  ██║██╔══██╗██║   ██║   ██╔══██║██║╚██╔╝██║ ╚═══██╗\n"
+                 "                 ██║   ██████╔╝██║             ██║  ██║███████╗╚██████╔╝╚█████╔╝██║  ██║██║   ██║   ██║  ██║██║ ╚═╝ ██║██████╔╝\n"
+                 "                 ╚═╝   ╚═════╝ ╚═╝             ╚═╝  ╚═╝╚══════╝ ╚═════╝  ╚════╝ ╚═╝  ╚═╝╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝     ╚═╝╚═════╝ \n";
+
+
     std::cout << "Choose one of the following options:\n"
               << "\t1. Backtracking algorithm;\n"
               << "\t2. Triangular Approximation Heuristic;\n"
@@ -88,15 +105,32 @@ void displayFunctionalities(){
 }
 
 void displayPath(const std::vector<std::shared_ptr<Edge>>& path){
-    std::cout << "The following Hamiltonian path was found:\n";
+    std::cout << "Want the path to be displayed?\n";
+    bool display = getYesNoAnswer();
+    if (display) std::cout << "The following Hamiltonian path was found:\n";
     double dist = 0;
-    std::cout << path.front()->getOrig()->getCode() << " - ";
+    if (display) std::cout << path.front()->getOrig()->getCode() << " - ";
     for (const std::shared_ptr<Edge>& e : path){
-        std::cout << e->getDest()->getCode();
-        if (e->getDest()->getCode() != path.front()->getOrig()->getCode()) std::cout << " - ";
+        if (display) std::cout << e->getDest()->getCode();
+        if (e->getDest()->getCode() != path.front()->getOrig()->getCode() and display) std::cout << " - ";
+        else if (e->getDest()->getCode() == path.front()->getOrig()->getCode() and display) std::cout << "\n";
         dist += e->getWeight();
     }
-    std::cout << "\nThe total distance is: " << std::fixed << std::setprecision(2) << dist << "\n";
+    std::cout << "The total distance is: " << std::fixed << std::setprecision(2) << dist << "\n";
+}
+
+void displayPath(const std::vector<std::shared_ptr<Vertex>>& path){
+    std::cout << "Want the path to be displayed?\n";
+    bool display = getYesNoAnswer();
+    if (display) std::cout << "The following Hamiltonian path was found:\n";
+    double dist = 0;
+    for (uint32_t k = 0; k < path.size() - 1; k++){
+        std::shared_ptr<Edge> e = path[k]->findEdge(path[k+1]);
+        dist += e->getWeight();
+        if (display) std::cout << path[k]->getCode() << " - ";
+        if (k == path.size() - 2 and display) std::cout << path[k+1]->getCode() << "\n";
+    }
+    std::cout << "The total distance is: " << std::fixed << std::setprecision(2) << dist << "\n";
 }
 
 std::shared_ptr<Vertex> ask_vertex(const std::unique_ptr<Graph>& g){

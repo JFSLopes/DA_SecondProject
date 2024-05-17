@@ -8,14 +8,14 @@
 void App::init() {
     while(true){
         g = std::make_unique<Graph>();
-        std::string nodes;
-        std::string edges;
-        std::string path;
-        bool header;
-        bool edges_only;
-        uint32_t num_nodes_file;
+        nodes = "nodes.csv";
+        edges = "edges.csv";
+        path = "../Dataset/Real-world/graph2/";
+        header = true;
+        edges_only = false;
+        num_nodes_file = 5000;
 
-        displayChooseFiles(edges, nodes, header, num_nodes_file, path, edges_only);
+        //displayChooseFiles(edges, nodes, header, num_nodes_file, path, edges_only);
         if (!FileParse::readFiles(g, edges, nodes, header, num_nodes_file, path, edges_only)){
             std::cout << "Something went wrong while reading the files. Make sure the names and path are correct.\n";
             continue;
@@ -33,9 +33,6 @@ bool App::functionalities() {
     for (const std::shared_ptr<Vertex>& v : g->getVertexSet()){
         num_edges += v->getAdj().size();
     }
-    std::cout << "Number of vertex: " << num_nodes << "\n";
-    std::cout << "Number of edges: " << num_edges << "\n";
-
     while (true){
         displayFunctionalities();
         switch(askNumber(9)){
@@ -52,6 +49,18 @@ bool App::functionalities() {
                 nearest_neighbour();
                 break;
             case 5:
+                if (made_fully_connected){
+                    std::cout << "Reverting the changes made to the graph in previous algorithms.\n";
+                    g = std::make_unique<Graph>();
+                    made_fully_connected = false;
+                    if (FileParse::readFiles(g, edges, nodes, header, num_nodes_file, path, edges_only)){
+                        std::cout << "Previous changes were successfully reverted.\n";
+                    }
+                    else{
+                        std::cout << "Something went wrong while reverting the changes.\n";
+                        continue;
+                    }
+                }
                 TSP_Real_World();
                 break;
             case 8:
@@ -62,6 +71,10 @@ bool App::functionalities() {
                 std::cout << "Invalid input.\n";
                 break;
         }
+        std::cout << "Press Enter to continue";
+        std::string aux;
+        std::getline(std::cin, aux);
+        std::cout << "\n\n";
     }
 }
 
@@ -103,10 +116,6 @@ void App::find_best_hamiltonian(
 }
 
 void App::backtracking() const {
-    // Start the timer
-    auto start_time = std::chrono::high_resolution_clock::now();
-
-
     uint32_t size_hamiltonian = g->getVertexSet().size();
     for (const std::shared_ptr<Vertex>& vertex : g->getVertexSet()){
         vertex->setVisited(false);
@@ -119,101 +128,64 @@ void App::backtracking() const {
     double path_sum = 0, best_sum = DBL_MAX;
     find_best_hamiltonian(s, s, curr_path, best_path, size_hamiltonian, path_sum, best_sum);
     displayPath(best_path);
-
-
-
-    // End the timer
-    auto end_time = std::chrono::high_resolution_clock::now();
-
-    // Calculate the duration in seconds
-    std::chrono::duration<double> duration = end_time - start_time;
-    double duration_seconds = duration.count();
-
-    // Output the time taken
-    std::cout << "Time taken: " << duration_seconds << " seconds\n";
 }
 
 void App::triangular_approximation(){
-    auto start_time = std::chrono::steady_clock::now(); // Record start time
-
-
     for (const std::shared_ptr<Vertex>& vertex : g->getVertexSet()){
         vertex->setVisited(false);
     }
     std::shared_ptr<Vertex> s = g->findVertex(0);
     std::vector<std::shared_ptr<Edge>> path;
     if (!make_fully_connected()){
-        std::cout << "Is not possible to do the approximation\n";
-        return;
+        std::cout << "The algorithm will run on a graph that is not fully connected due to missing information.\n";
     }
     if (!g->triangular_approximation(s, path)){
         std::cout << "Is not possible to do the approximation\n";
         return;
     }
     displayPath(path);
-
-    auto end_time = std::chrono::steady_clock::now(); // Record end time
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time); // Calculate duration
-    double seconds = duration.count() / 1000.0; // Convert milliseconds to seconds
-    std::cout << "Time taken: " << seconds << " seconds\n";
 }
 
 bool App::make_fully_connected() {
     if (num_nodes * (num_nodes - 1) == num_edges) return true;
     if (!g->getVertexSet().empty() and g->getVertexSet().front()->getCoordinates().getLat() == DBL_MAX) return false;
+    std::cout << "Making the graph fully connected...\n";
     g->fully_connected(num_edges);
+    made_fully_connected = true;
     return (num_nodes * (num_nodes - 1) == num_edges);
 }
 
 void App::other_heuristic(){
-    auto start_time = std::chrono::steady_clock::now(); // Record start time
-
-
-
     std::shared_ptr<Vertex> s = g->findVertex(0);
     std::vector<std::shared_ptr<Edge>> hamiltonian;
     if (!make_fully_connected()){
+        std::cout << "The algorithm will run on a graph that is not fully connected due to missing information.\n";
+    }
+    if (!g->Christofides(s, hamiltonian)){
         std::cout << "Is not possible to do the approximation\n";
         return;
     }
-    g->Christofides(s, hamiltonian);
     displayPath(hamiltonian);
-
-
-
-    auto end_time = std::chrono::steady_clock::now(); // Record end time
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time); // Calculate duration
-    double seconds = duration.count() / 1000.0; // Convert milliseconds to seconds
-    std::cout << "Time taken: " << seconds << " seconds\n";
 }
 
 void App::nearest_neighbour() {
-    auto start_time = std::chrono::steady_clock::now(); // Record start time
-
-
     std::shared_ptr<Vertex> s = g->findVertex(0);
     std::vector<std::shared_ptr<Edge>> hamiltonian;
     if (!make_fully_connected()){
+        std::cout << "The algorithm will run on a graph that is not fully connected due to missing information.\n";
+    }
+    if (!g->nearest_neighbour(s, hamiltonian)){
         std::cout << "Is not possible to do the approximation\n";
         return;
     }
-    g->nearest_neighbour(s, hamiltonian);
     displayPath(hamiltonian);
-
-
-
-    auto end_time = std::chrono::steady_clock::now(); // Record end time
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time); // Calculate duration
-    double seconds = duration.count() / 1000.0; // Convert milliseconds to seconds
-    std::cout << "Time taken: " << seconds << " seconds\n";
 }
 
 void App::TSP_Real_World() const {
-
-    std::vector<std::shared_ptr<Edge>> hamiltonian;
     std::shared_ptr<Vertex> s = ask_vertex(g);
-    if (!g->nearest_neighbour(s, hamiltonian)){
+    std::vector<std::shared_ptr<Vertex>> path;
+    if (!g->nn_with_backtracking(s, path)){
         std::cout << "No path found.\n";
     }
-    else displayPath(hamiltonian);
+    else displayPath(path);
 }

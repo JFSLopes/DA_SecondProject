@@ -177,7 +177,9 @@ void Graph::findMinimumWeightPerfectMatching() {
     for (const std::shared_ptr<Vertex>& v: vertexSet){
         if ((v->getIn() + v->getOut()) % 2 != 0){
             for (const std::shared_ptr<Edge>& e : v->getAdj()){
-                all_edges.push_back(e);
+                if (!e->isSelected()) {
+                    all_edges.push_back(e);
+                }
             }
         }
     }
@@ -251,4 +253,64 @@ bool Graph::nearest_neighbour(const std::shared_ptr<Vertex> &s, std::vector<std:
         hamiltonian.push_back(last_edge);
     }
     return hamiltonian.size() == vertexSet.size();
+}
+
+bool Graph::nn_backtracking(const std::shared_ptr<Vertex> &s, const std::shared_ptr<Vertex>& d, std::vector<std::shared_ptr<Vertex>>& path) {
+    s->setVisited(true);
+    path.push_back(s);
+    for (const std::shared_ptr<Edge>& e : s->getAdj()){
+        if (!e->getDest()->isVisited()){
+            if (nn_backtracking(e->getDest(), d, path)) return true;
+        }
+        else if (path.size() == vertexSet.size() and e->getDest()->getCode() == d->getCode()){ /// Check if the vertex is connected to the destination
+            path.push_back(d);
+            return true;
+        }
+    }
+    s->setVisited(false);
+    path.pop_back();
+    return false;
+}
+
+bool Graph::nn_with_backtracking(const std::shared_ptr<Vertex> &s, std::vector<std::shared_ptr<Vertex>> &hamiltonian) {
+    prim(s);
+    set_in_out_degree();
+    for (const std::shared_ptr<Vertex>& v : vertexSet){
+        v->order_edges();
+        v->setVisited(false);
+    }
+
+    hamiltonian.clear();
+    if (!nn_backtracking(s, s, hamiltonian)) return false;
+    return true;
+}
+
+double calculateLengthDelta(const std::vector<std::shared_ptr<Vertex>>& path, uint32_t i, uint32_t k) {
+    std::shared_ptr<Edge> e1 = path[i]->findEdge(path[(i + 1) % path.size()]);
+    std::shared_ptr<Edge> e2 = path[k]->findEdge(path[(k + 1) % path.size()]);
+    std::shared_ptr<Edge> e3 = path[i]->findEdge(path[k]);
+    std::shared_ptr<Edge> e4 = path[(i + 1) % path.size()]->findEdge(path[(k + 1) % path.size()]);
+
+    if (e1 == nullptr or e2 == nullptr or e3 == nullptr or e4 == nullptr){ /// The edge does not exist, so the swap must not take place, any positive value would work
+        return 1;
+    }
+
+    return - e1->getWeight() - e2->getWeight() + e3->getWeight() + e4->getWeight();
+}
+
+void Graph::opt2(std::vector<std::shared_ptr<Vertex>>& path, double dist) const {
+    bool improvement = true;
+    while (improvement){
+        improvement = false;
+        for (uint32_t i = 1; i < path.size() - 1; ++i) {
+            for (uint32_t k = i + 1; k < path.size(); ++k) {
+                double delta = calculateLengthDelta(path, i, k);
+                if (delta < 0) {
+                    std::reverse(path.begin() + i + 1, path.begin() + k + 1);
+                    dist += delta;
+                    improvement = true;
+                }
+            }
+        }
+    }
 }

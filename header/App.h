@@ -14,6 +14,13 @@ private:
     std::unique_ptr<Graph> g; ///< Pointer to the graph structure that represents the network
     uint32_t num_nodes; ///< Number of nodes in g
     uint64_t num_edges = 0; ///< Number of edges in g
+    std::string nodes;
+    std::string edges;
+    std::string path;
+    bool header;
+    bool edges_only;
+    uint32_t num_nodes_file;
+    bool made_fully_connected = false;
 
     /**
      * @brief Finds the best hamiltonian path using a simple using backtracking algorithm
