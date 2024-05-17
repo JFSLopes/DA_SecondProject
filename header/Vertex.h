@@ -7,6 +7,7 @@ class Edge;
 #include "Coordinates.h"
 #include "MutablePriorityQueue.h"
 #include <vector>
+#include <map>
 #include <memory>
 
 /**
@@ -23,6 +24,7 @@ private:
     double dist; ///< Used to store the distance
     uint32_t in; ///< Number of in going edges
     uint32_t out; ///< Number of out going edges
+    std::unordered_map<uint32_t, std::shared_ptr<Edge>> m;
 public:
     /**
      * @brief Vertex constructor

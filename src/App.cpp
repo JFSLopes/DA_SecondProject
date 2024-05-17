@@ -116,6 +116,7 @@ void App::find_best_hamiltonian(
 }
 
 void App::backtracking() const {
+    std::cout << "Running the backtracking algorithm.\n";
     uint32_t size_hamiltonian = g->getVertexSet().size();
     for (const std::shared_ptr<Vertex>& vertex : g->getVertexSet()){
         vertex->setVisited(false);
@@ -139,6 +140,7 @@ void App::triangular_approximation(){
     if (!make_fully_connected()){
         std::cout << "The algorithm will run on a graph that is not fully connected due to missing information.\n";
     }
+    std::cout << "Running the Triangular algorithm.\n";
     if (!g->triangular_approximation(s, path)){
         std::cout << "Is not possible to do the approximation\n";
         return;
@@ -161,6 +163,7 @@ void App::other_heuristic(){
     if (!make_fully_connected()){
         std::cout << "The algorithm will run on a graph that is not fully connected due to missing information.\n";
     }
+    std::cout << "Running the Christofides algorithm.\n";
     if (!g->Christofides(s, hamiltonian)){
         std::cout << "Is not possible to do the approximation\n";
         return;
@@ -174,6 +177,7 @@ void App::nearest_neighbour() {
     if (!make_fully_connected()){
         std::cout << "The algorithm will run on a graph that is not fully connected due to missing information.\n";
     }
+    std::cout << "Running the NN algorithm.\n";
     if (!g->nearest_neighbour(s, hamiltonian)){
         std::cout << "Is not possible to do the approximation\n";
         return;
@@ -184,8 +188,25 @@ void App::nearest_neighbour() {
 void App::TSP_Real_World() const {
     std::shared_ptr<Vertex> s = ask_vertex(g);
     std::vector<std::shared_ptr<Vertex>> path;
+    std::cout << "Running the real-world algorithm algorithm.\n";
     if (!g->nn_with_backtracking(s, path)){
         std::cout << "No path found.\n";
+        return;
     }
-    else displayPath(path);
+    std::cout << "A hamiltonian path was found. Do you pretend to tru to improve it with a 2-opt algorithm?\n";
+    bool answer = getYesNoAnswer();
+    std::cout << "How many iteration you want to execute?\n";
+    uint32_t num_iterations = askNumber(UINT32_MAX);
+
+    double dist = 0;
+    for (uint32_t k = 0; k < path.size() - 1; k++){
+        std::shared_ptr<Edge> e = path[k]->findEdge(path[k+1]);
+        dist += e->getWeight();
+    }
+
+    if (answer){
+        std::cout << "Running the 2-opt algorithm.\n";
+        g->opt2(path, dist, num_iterations);
+    }
+    displayPath(path);
 }

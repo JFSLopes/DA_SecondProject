@@ -297,18 +297,16 @@ double calculateLengthDelta(const std::vector<std::shared_ptr<Vertex>>& path, ui
 
     return - e1->getWeight() - e2->getWeight() + e3->getWeight() + e4->getWeight();
 }
-
-void Graph::opt2(std::vector<std::shared_ptr<Vertex>>& path, double dist) const {
-    bool improvement = true;
-    while (improvement){
-        improvement = false;
-        for (uint32_t i = 1; i < path.size() - 1; ++i) {
-            for (uint32_t k = i + 1; k < path.size(); ++k) {
+#include <iostream>
+void Graph::opt2(std::vector<std::shared_ptr<Vertex>>& path, double dist, uint32_t num_iterations) const {
+    while (num_iterations--){
+        std::cout << "Running iteration " << num_iterations << "\n";
+        for (uint32_t i = 1; i < path.size() - 2; ++i) {
+            std::cout << "Value: " << i << "\n";
+            for (uint32_t k = i + 1; k < path.size() - 1; ++k) {
                 double delta = calculateLengthDelta(path, i, k);
                 if (delta < 0) {
                     std::reverse(path.begin() + i + 1, path.begin() + k + 1);
-                    dist += delta;
-                    improvement = true;
                 }
             }
         }
