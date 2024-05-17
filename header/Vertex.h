@@ -105,7 +105,13 @@ public:
      * @return Returns a pointer to the edge or nullptr if the edge does not exist
      */
     std::shared_ptr<Edge> findEdge(const std::shared_ptr<Vertex>& d) const;
+    /**
+     * @brief Order the vertex edges
+     */
     void order_edges();
+    /**
+     * @return Returns the vertex total degree.
+     */
     uint32_t getDegree() const;
 
 

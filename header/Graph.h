@@ -40,9 +40,16 @@ private:
     /**
      * @brief Finds an Eulerian circuit (Used in Christofides)
      *
-     * @param visitedVertices Vector that will store all vertex vesited during the algorithm
+     * @param visitedVertices Vector that will store all vertex visited during the algorithm
      */
     void formEulerianCircuit(std::vector<std::shared_ptr<Vertex>>& visitedVertices);
+    /**
+     * @brief Implements the 2-opt algorithm to improve an hamiltonian path
+     *
+     * @param path Vector that stores the hamiltonian path
+     * @param dist 'path' total distance
+     */
+    void opt2(std::vector<std::shared_ptr<Vertex>>& path, double dist) const;
 public:
     /**
      * @brief Returns the vertex set of the graph.
@@ -92,7 +99,26 @@ public:
      * @return True if a hamiltonian was found, false otherwise
      */
     bool nearest_neighbour(const std::shared_ptr<Vertex>& s, std::vector<std::shared_ptr<Edge>>& hamiltonian);
+    /**
+     * @brief This function implements a NN algorithm but the closest Vertex is the one with less degree
+     *
+     * This function chooses the vertex that has the less degree. The logic behind it is that leaving the vertex with higher
+     * degree to the end will prevent the algorithm to be stuck (be in a part of the graph that cannot leave).
+     * If the algorithm gets stuck, it uses backtracking to look for other paths.
+     *
+     * @param s Source Vertex
+     * @param hamiltonian Vector that will store the hamiltonian path
+     * @return True if found a hamiltonian path, false otherwise
+     */
     bool nn_with_backtracking(const std::shared_ptr<Vertex>& s, std::vector<std::shared_ptr<Vertex>>& hamiltonian);
+    /**
+     * @brief Auxiliary function that does the backtracking
+     *
+     * @param s Source Vertex
+     * @param d Destination Vertex (must have the same value as 's')
+     * @param path Vector that will store the hamiltonian path
+     * @return rue if found a hamiltonian path, false otherwise
+     */
     bool nn_backtracking(const std::shared_ptr<Vertex>& s, const std::shared_ptr<Vertex>& d, std::vector<std::shared_ptr<Vertex>>& path);
 };
 
