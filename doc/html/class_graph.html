@@ -104,6 +104,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aef038766dd38ff6de5099787ff52518a" id="r_aef038766dd38ff6de5099787ff52518a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_graph.html#aef038766dd38ff6de5099787ff52518a">nearest_neighbour</a> (const std::shared_ptr&lt; <a class="el" href="class_vertex.html">Vertex</a> &gt; &amp;s, std::vector&lt; std::shared_ptr&lt; <a class="el" href="class_edge.html">Edge</a> &gt; &gt; &amp;hamiltonian)</td></tr>
 <tr class="memdesc:aef038766dd38ff6de5099787ff52518a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implements the NN algorithm for the TSP.  <br /></td></tr>
 <tr class="separator:aef038766dd38ff6de5099787ff52518a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13645619b90921950355f1c79ced6877" id="r_a13645619b90921950355f1c79ced6877"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_graph.html#a13645619b90921950355f1c79ced6877">nn_with_backtracking</a> (const std::shared_ptr&lt; <a class="el" href="class_vertex.html">Vertex</a> &gt; &amp;s, std::vector&lt; std::shared_ptr&lt; <a class="el" href="class_vertex.html">Vertex</a> &gt; &gt; &amp;hamiltonian)</td></tr>
+<tr class="memdesc:a13645619b90921950355f1c79ced6877"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function implements a NN algorithm but the closest <a class="el" href="class_vertex.html" title="Allows to represent the information of any vertex on the graph.">Vertex</a> is the one with less degree.  <br /></td></tr>
+<tr class="separator:a13645619b90921950355f1c79ced6877"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2504363212039617cf075be46a663301" id="r_a2504363212039617cf075be46a663301"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_graph.html#a2504363212039617cf075be46a663301">nn_backtracking</a> (const std::shared_ptr&lt; <a class="el" href="class_vertex.html">Vertex</a> &gt; &amp;s, const std::shared_ptr&lt; <a class="el" href="class_vertex.html">Vertex</a> &gt; &amp;d, std::vector&lt; std::shared_ptr&lt; <a class="el" href="class_vertex.html">Vertex</a> &gt; &gt; &amp;path)</td></tr>
+<tr class="memdesc:a2504363212039617cf075be46a663301"><td class="mdescLeft">&#160;</td><td class="mdescRight">Auxiliary function that does the backtracking.  <br /></td></tr>
+<tr class="separator:a2504363212039617cf075be46a663301"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f010b69704d968d5919abda9577e03c" id="r_a9f010b69704d968d5919abda9577e03c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_graph.html#a9f010b69704d968d5919abda9577e03c">opt2</a> (std::vector&lt; std::shared_ptr&lt; <a class="el" href="class_vertex.html">Vertex</a> &gt; &gt; &amp;path, double dist, uint32_t num_iterations) const</td></tr>
+<tr class="memdesc:a9f010b69704d968d5919abda9577e03c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implements the 2-opt algorithm to improve an hamiltonian path.  <br /></td></tr>
+<tr class="separator:a9f010b69704d968d5919abda9577e03c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Stores information in a graph structure. </p>
@@ -280,6 +289,134 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if a hamiltonian was found, false otherwise </dd></dl>
+
+</div>
+</div>
+<a id="a2504363212039617cf075be46a663301" name="a2504363212039617cf075be46a663301"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2504363212039617cf075be46a663301">&#9670;&#160;</a></span>nn_backtracking()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Graph::nn_backtracking </td>
+          <td>(</td>
+          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="class_vertex.html">Vertex</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="class_vertex.html">Vertex</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>d</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::shared_ptr&lt; <a class="el" href="class_vertex.html">Vertex</a> &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>path</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Auxiliary function that does the backtracking. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>Source <a class="el" href="class_vertex.html" title="Allows to represent the information of any vertex on the graph.">Vertex</a> </td></tr>
+    <tr><td class="paramname">d</td><td>Destination <a class="el" href="class_vertex.html" title="Allows to represent the information of any vertex on the graph.">Vertex</a> (must have the same value as 's') </td></tr>
+    <tr><td class="paramname">path</td><td>Vector that will store the hamiltonian path </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>rue if found a hamiltonian path, false otherwise </dd></dl>
+
+</div>
+</div>
+<a id="a13645619b90921950355f1c79ced6877" name="a13645619b90921950355f1c79ced6877"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a13645619b90921950355f1c79ced6877">&#9670;&#160;</a></span>nn_with_backtracking()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Graph::nn_with_backtracking </td>
+          <td>(</td>
+          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="class_vertex.html">Vertex</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::shared_ptr&lt; <a class="el" href="class_vertex.html">Vertex</a> &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>hamiltonian</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This function implements a NN algorithm but the closest <a class="el" href="class_vertex.html" title="Allows to represent the information of any vertex on the graph.">Vertex</a> is the one with less degree. </p>
+<p>This function chooses the vertex that has the less degree. The logic behind it is that leaving the vertex with higher degree to the end will prevent the algorithm to be stuck (be in a part of the graph that cannot leave). If the algorithm gets stuck, it uses backtracking to look for other paths.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>Source <a class="el" href="class_vertex.html" title="Allows to represent the information of any vertex on the graph.">Vertex</a> </td></tr>
+    <tr><td class="paramname">hamiltonian</td><td>Vector that will store the hamiltonian path </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if found a hamiltonian path, false otherwise </dd></dl>
+
+</div>
+</div>
+<a id="a9f010b69704d968d5919abda9577e03c" name="a9f010b69704d968d5919abda9577e03c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f010b69704d968d5919abda9577e03c">&#9670;&#160;</a></span>opt2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Graph::opt2 </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; std::shared_ptr&lt; <a class="el" href="class_vertex.html">Vertex</a> &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>dist</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>num_iterations</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Implements the 2-opt algorithm to improve an hamiltonian path. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>Vector that stores the hamiltonian path </td></tr>
+    <tr><td class="paramname">dist</td><td>'path' total distance </td></tr>
+    <tr><td class="paramname">num_iterations</td><td>Number of iteration the algorithm should run </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

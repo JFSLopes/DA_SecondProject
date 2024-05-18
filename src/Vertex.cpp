@@ -1,6 +1,5 @@
 #include "../header/Vertex.h"
 #include <algorithm>
-#include <cfloat>
 
 Vertex::Vertex(uint32_t code, double lat, double lon) : code(code), coordinates(Coordinates(lat, lon)), in(0), out(0) {}
 

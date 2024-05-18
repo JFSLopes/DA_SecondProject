@@ -8,14 +8,8 @@
 void App::init() {
     while(true){
         g = std::make_unique<Graph>();
-        nodes = "nodes.csv";
-        edges = "edges.csv";
-        path = "../Dataset/Real-world/graph3/";
-        header = true;
-        edges_only = false;
-        num_nodes_file = 10000;
 
-        //displayChooseFiles(edges, nodes, header, num_nodes_file, path, edges_only);
+        displayChooseFiles(edges, nodes, header, num_nodes_file, path, edges_only);
         if (!FileParse::readFiles(g, edges, nodes, header, num_nodes_file, path, edges_only)){
             std::cout << "Something went wrong while reading the files. Make sure the names and path are correct.\n";
             continue;
@@ -194,17 +188,17 @@ void App::TSP_Real_World() const {
         return;
     }
     std::cout << "A hamiltonian path was found. Do you pretend to tru to improve it with a 2-opt algorithm?\n";
+
     bool answer = getYesNoAnswer();
-    std::cout << "How many iteration you want to execute?\n";
-    uint32_t num_iterations = askNumber(UINT32_MAX);
-
-    double dist = 0;
-    for (uint32_t k = 0; k < hamiltonian.size() - 1; k++){
-        std::shared_ptr<Edge> e = hamiltonian[k]->findEdge(hamiltonian[k+1]);
-        dist += e->getWeight();
-    }
-
     if (answer){
+        double dist = 0;
+        for (uint32_t k = 0; k < hamiltonian.size() - 1; k++){
+            std::shared_ptr<Edge> e = hamiltonian[k]->findEdge(hamiltonian[k+1]);
+            dist += e->getWeight();
+        }
+
+        std::cout << "How many iteration you want to execute?\n";
+        uint32_t num_iterations = askNumber(UINT32_MAX);
         std::cout << "Running the 2-opt algorithm.\n";
         g->opt2(hamiltonian, dist, num_iterations);
     }

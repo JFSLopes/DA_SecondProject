@@ -298,7 +298,7 @@ double calculateLengthDelta(const std::vector<std::shared_ptr<Vertex>>& path, ui
 
     return - d1 - d2 + d3 + d4;
 }
-#include <set>
+
 void Graph::opt2(std::vector<std::shared_ptr<Vertex>>& path, double dist, uint32_t num_iterations) const {
     std::vector<std::vector<double>> edges(vertexSet.size(), std::vector<double>(vertexSet.size(), DBL_MAX));
     for (const std::shared_ptr<Vertex>& v : vertexSet){
@@ -322,12 +322,4 @@ void Graph::opt2(std::vector<std::shared_ptr<Vertex>>& path, double dist, uint32
             }
         }
     }
-
-    std::set<uint32_t> s;
-    for (const std::shared_ptr<Vertex> v : path){
-        s.insert(v->getCode());
-    }
-
-    std::cout << "Set size: " << s.size() << "\n";
-
 }
