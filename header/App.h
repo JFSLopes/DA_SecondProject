@@ -20,7 +20,7 @@ private:
     bool header; ///< True if the edges file has a header
     bool edges_only; ///< True if there is only a edges file
     uint32_t num_nodes_file; ///< Number of nodes to be loaded
-    bool made_fully_connected = false;
+    bool made_fully_connected = false; ///< True if the graph has made fully connected, False otherwise
     /**
      * @brief Finds the best hamiltonian path using a simple using backtracking algorithm
      * @param s Current vertex being processed
