@@ -1,4 +1,5 @@
 #include "../header/Graph.h"
+#include <iostream>
 #include <cfloat>
 #include <stack>
 #include <unordered_set>
@@ -285,32 +286,48 @@ bool Graph::nn_with_backtracking(const std::shared_ptr<Vertex> &s, std::vector<s
     return true;
 }
 
-double calculateLengthDelta(const std::vector<std::shared_ptr<Vertex>>& path, uint32_t i, uint32_t k) {
-    std::shared_ptr<Edge> e1 = path[i]->findEdge(path[(i + 1) % path.size()]);
-    std::shared_ptr<Edge> e2 = path[k]->findEdge(path[(k + 1) % path.size()]);
-    std::shared_ptr<Edge> e3 = path[i]->findEdge(path[k]);
-    std::shared_ptr<Edge> e4 = path[(i + 1) % path.size()]->findEdge(path[(k + 1) % path.size()]);
+double calculateLengthDelta(const std::vector<std::shared_ptr<Vertex>>& path, uint32_t c1, uint32_t c2, uint32_t c3, uint32_t c4, std::vector<std::vector<double>>& edges) {
+    double d1 = edges[c1][c2];
+    double d2 = edges[c3][c4];
+    double d3 = edges[c1][c3];
+    double d4 = edges[c2][c4];
 
-    if (e1 == nullptr or e2 == nullptr or e3 == nullptr or e4 == nullptr){ /// The edge does not exist, so the swap must not take place, any positive value would work
+    if (d1 == DBL_MAX or d2 == DBL_MAX or d3 == DBL_MAX or d4 == DBL_MAX){ /// The edge does not exist, so the swap must not take place, any positive value would work
         return 1;
     }
 
-    return - e1->getWeight() - e2->getWeight() + e3->getWeight() + e4->getWeight();
+    return - d1 - d2 + d3 + d4;
 }
+#include <set>
+void Graph::opt2(std::vector<std::shared_ptr<Vertex>>& path, double dist, uint32_t num_iterations) const {
+    std::vector<std::vector<double>> edges(vertexSet.size(), std::vector<double>(vertexSet.size(), DBL_MAX));
+    for (const std::shared_ptr<Vertex>& v : vertexSet){
+        for (const std::shared_ptr<Edge>& e : v->getAdj()){
+            edges[v->getCode()][e->getDest()->getCode()] = e->getWeight();
+            edges[e->getDest()->getCode()][v->getCode()] = e->getWeight();
 
-void Graph::opt2(std::vector<std::shared_ptr<Vertex>>& path, double dist) const {
+        }
+    }
     bool improvement = true;
-    while (improvement){
+    while (num_iterations-- && improvement){
         improvement = false;
-        for (uint32_t i = 1; i < path.size() - 1; ++i) {
-            for (uint32_t k = i + 1; k < path.size(); ++k) {
-                double delta = calculateLengthDelta(path, i, k);
+        std::cout << "Running iteration " << num_iterations << "\n";
+        for (uint32_t i = 1; i < path.size() - 2; i++) {
+            for (uint32_t k = i + 1; k < path.size() - 1; k++) {
+                double delta = calculateLengthDelta(path, path[i]->getCode(), path[i+1]->getCode(), path[k]->getCode(), path[k+1]->getCode(), edges);
                 if (delta < 0) {
                     std::reverse(path.begin() + i + 1, path.begin() + k + 1);
-                    dist += delta;
                     improvement = true;
                 }
             }
         }
     }
+
+    std::set<uint32_t> s;
+    for (const std::shared_ptr<Vertex> v : path){
+        s.insert(v->getCode());
+    }
+
+    std::cout << "Set size: " << s.size() << "\n";
+
 }

@@ -76,9 +76,6 @@ uint32_t Vertex::getDegree() const {
 
 
 void Vertex::order_edges() {
-    /*
-    std::sort(adj.begin(), adj.end(), [](const std::shared_ptr<Edge>& e1, const std::shared_ptr<Edge>& e2) {return e1->getWeight() < e2->getWeight();});
-    */
     auto comp = [] (const std::shared_ptr<Edge>& e1, const std::shared_ptr<Edge>& e2){
         if (e1->getDest()->getDegree() < e2->getDest()->getDegree()) return true;
         else if (e1->getDest()->getDegree() == e2->getDest()->getDegree() and e1->getWeight() < e2->getWeight()) return true;

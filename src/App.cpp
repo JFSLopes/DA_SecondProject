@@ -10,10 +10,10 @@ void App::init() {
         g = std::make_unique<Graph>();
         nodes = "nodes.csv";
         edges = "edges.csv";
-        path = "../Dataset/Real-world/graph2/";
+        path = "../Dataset/Real-world/graph3/";
         header = true;
         edges_only = false;
-        num_nodes_file = 5000;
+        num_nodes_file = 10000;
 
         //displayChooseFiles(edges, nodes, header, num_nodes_file, path, edges_only);
         if (!FileParse::readFiles(g, edges, nodes, header, num_nodes_file, path, edges_only)){
@@ -116,6 +116,7 @@ void App::find_best_hamiltonian(
 }
 
 void App::backtracking() const {
+    std::cout << "Running the backtracking algorithm.\n";
     uint32_t size_hamiltonian = g->getVertexSet().size();
     for (const std::shared_ptr<Vertex>& vertex : g->getVertexSet()){
         vertex->setVisited(false);
@@ -135,15 +136,16 @@ void App::triangular_approximation(){
         vertex->setVisited(false);
     }
     std::shared_ptr<Vertex> s = g->findVertex(0);
-    std::vector<std::shared_ptr<Edge>> path;
+    std::vector<std::shared_ptr<Edge>> hamiltonian;
     if (!make_fully_connected()){
         std::cout << "The algorithm will run on a graph that is not fully connected due to missing information.\n";
     }
-    if (!g->triangular_approximation(s, path)){
+    std::cout << "Running the Triangular algorithm.\n";
+    if (!g->triangular_approximation(s, hamiltonian)){
         std::cout << "Is not possible to do the approximation\n";
         return;
     }
-    displayPath(path);
+    displayPath(hamiltonian);
 }
 
 bool App::make_fully_connected() {
@@ -161,6 +163,7 @@ void App::other_heuristic(){
     if (!make_fully_connected()){
         std::cout << "The algorithm will run on a graph that is not fully connected due to missing information.\n";
     }
+    std::cout << "Running the Christofides algorithm.\n";
     if (!g->Christofides(s, hamiltonian)){
         std::cout << "Is not possible to do the approximation\n";
         return;
@@ -174,6 +177,7 @@ void App::nearest_neighbour() {
     if (!make_fully_connected()){
         std::cout << "The algorithm will run on a graph that is not fully connected due to missing information.\n";
     }
+    std::cout << "Running the NN algorithm.\n";
     if (!g->nearest_neighbour(s, hamiltonian)){
         std::cout << "Is not possible to do the approximation\n";
         return;
@@ -183,9 +187,26 @@ void App::nearest_neighbour() {
 
 void App::TSP_Real_World() const {
     std::shared_ptr<Vertex> s = ask_vertex(g);
-    std::vector<std::shared_ptr<Vertex>> path;
-    if (!g->nn_with_backtracking(s, path)){
+    std::vector<std::shared_ptr<Vertex>> hamiltonian;
+    std::cout << "Running the real-world algorithm algorithm.\n";
+    if (!g->nn_with_backtracking(s, hamiltonian)){
         std::cout << "No path found.\n";
+        return;
     }
-    else displayPath(path);
+    std::cout << "A hamiltonian path was found. Do you pretend to tru to improve it with a 2-opt algorithm?\n";
+    bool answer = getYesNoAnswer();
+    std::cout << "How many iteration you want to execute?\n";
+    uint32_t num_iterations = askNumber(UINT32_MAX);
+
+    double dist = 0;
+    for (uint32_t k = 0; k < hamiltonian.size() - 1; k++){
+        std::shared_ptr<Edge> e = hamiltonian[k]->findEdge(hamiltonian[k+1]);
+        dist += e->getWeight();
+    }
+
+    if (answer){
+        std::cout << "Running the 2-opt algorithm.\n";
+        g->opt2(hamiltonian, dist, num_iterations);
+    }
+    displayPath(hamiltonian);
 }

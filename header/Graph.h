@@ -43,13 +43,6 @@ private:
      * @param visitedVertices Vector that will store all vertex visited during the algorithm
      */
     void formEulerianCircuit(std::vector<std::shared_ptr<Vertex>>& visitedVertices);
-    /**
-     * @brief Implements the 2-opt algorithm to improve an hamiltonian path
-     *
-     * @param path Vector that stores the hamiltonian path
-     * @param dist 'path' total distance
-     */
-    void opt2(std::vector<std::shared_ptr<Vertex>>& path, double dist) const;
 public:
     /**
      * @brief Returns the vertex set of the graph.
@@ -120,6 +113,14 @@ public:
      * @return rue if found a hamiltonian path, false otherwise
      */
     bool nn_backtracking(const std::shared_ptr<Vertex>& s, const std::shared_ptr<Vertex>& d, std::vector<std::shared_ptr<Vertex>>& path);
+    /**
+     * @brief Implements the 2-opt algorithm to improve an hamiltonian path
+     *
+     * @param path Vector that stores the hamiltonian path
+     * @param dist 'path' total distance
+     * @param num_iterations Number of iteration the algorithm should run
+     */
+    void opt2(std::vector<std::shared_ptr<Vertex>>& path, double dist, uint32_t num_iterations) const;
 };
 
 #endif
