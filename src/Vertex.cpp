@@ -59,15 +59,9 @@ uint32_t Vertex::getOut() const {
 void Vertex::addEdge(const std::shared_ptr<Vertex> &s, const std::shared_ptr<Vertex> &d, double distance) {
     std::shared_ptr<Edge> edge = std::make_shared<Edge>(s, d, distance);
     adj.push_back(edge);
-    m.insert(std::make_pair(d->getCode(), edge));
 }
 
 std::shared_ptr<Edge> Vertex::findEdge(const std::shared_ptr<Vertex> &d) const {
-    auto itr = m.find(d->getCode());
-    if (itr == m.end()){
-        return nullptr;
-    }
-    else return itr->second;
     for (const std::shared_ptr<Edge>& e : adj){
         if (e->getDest()->getCode() == d->getCode()){
             return e;
@@ -82,9 +76,6 @@ uint32_t Vertex::getDegree() const {
 
 
 void Vertex::order_edges() {
-    /*
-    std::sort(adj.begin(), adj.end(), [](const std::shared_ptr<Edge>& e1, const std::shared_ptr<Edge>& e2) {return e1->getWeight() < e2->getWeight();});
-    */
     auto comp = [] (const std::shared_ptr<Edge>& e1, const std::shared_ptr<Edge>& e2){
         if (e1->getDest()->getDegree() < e2->getDest()->getDegree()) return true;
         else if (e1->getDest()->getDegree() == e2->getDest()->getDegree() and e1->getWeight() < e2->getWeight()) return true;
