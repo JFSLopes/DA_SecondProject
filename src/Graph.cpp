@@ -3,6 +3,8 @@
 #include <cfloat>
 #include <stack>
 #include <unordered_set>
+#include <unordered_map>
+#include <algorithm>
 
 const std::vector<std::shared_ptr<Vertex>>& Graph::getVertexSet() const {
     return vertexSet;

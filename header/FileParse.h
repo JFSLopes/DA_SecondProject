@@ -5,6 +5,7 @@
 #include <string>
 #include <fstream>
 #include <map>
+#include <unordered_map>
 
 /**
  * @namespace FileParse
