@@ -3,6 +3,7 @@
 
 class Graph;
 
+#include <string>
 #include "Graph.h"
 
 /**
